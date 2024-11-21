@@ -1,0 +1,36 @@
+{
+  "name": "educonnect",
+  "version": "1.0.0",
+  "description": "Student Knowledge Hub for peer learning.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevesdiary/educonnect.git"
+  },
+  "keywords": [
+    "knowledge",
+    "questions",
+    "answers"
+  ],
+  "author": "Stephen Oyeyemi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stevesdiary/educonnect/issues"
+  },
+  "homepage": "https://github.com/stevesdiary/educonnect#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.4",
+    "postgres": "^3.4.5",
+    "process": "^0.11.10",
+    "sequelize": "^6.37.5",
+    "uuid": "^11.0.3"
+  }
+}
