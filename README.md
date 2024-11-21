@@ -1,5 +1,5 @@
 # educonnect
-A Student Knowledge Hub for peer learning.
+Students Knowledge Hub for peer learning.
 
 
 In many public secondary schools across Africa, students often struggle to get quick answers to their study questions. 
