@@ -9,6 +9,11 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/', (req, res, next) => {
+	return res.status(200).json({
+		message: "Welcome to EDUCONNECT!",
+	})
+});
 app.use('/user', userRoute);
 
 app.listen(port, () => {
