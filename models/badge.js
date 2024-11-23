@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Badge',
-    tableName: 'Badges'
+    tableName: 'Badges',
+    paranoid: false
   });
   return Badge;
 };

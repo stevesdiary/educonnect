@@ -20,12 +20,24 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			defaultValue: DataTypes.UUIDV4
 		},
-    user_id: DataTypes.STRING,
-    badge_id: DataTypes.STRING,
-    earned_at: DataTypes.DATE
+    user_id: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+
+    badge_id: {
+			type: DataTypes.INTEGER,
+			allowNull: false
+		},
+
+    earned_at: {
+			type: DataTypes.DATE,
+			allowNull: false
+		},
   }, {
     sequelize,
     modelName: 'User_Badge',
+    tableName: 'User_Badges'
   });
   return User_Badge;
 };

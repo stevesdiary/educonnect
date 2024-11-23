@@ -10,39 +10,68 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.associate = (models) => { User.hasMany(models.Question, { foreignKey: 'user_id' });
+      User.hasMany(models.Answer, { foreignKey: 'user_id' });
+      User.belongsToMany(models.Badge, { through: 'UserBadge', foreignKey: 'user_id' });
+    };
     }
   }
   User.init({
-    id:{
+    id: {
 			type: DataTypes.UUID,
 			primaryKey: true,
 			allowNull: false,
 			defaultValue: DataTypes.UUIDV4
 		},
-    name:  {
+    name: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-    username:  {
+    username: {
 			type: DataTypes.STRING,
 			allowNull: false,
       unique: true,
 		},
-    email:  {
+    email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+      unique: true,
+		},
+    password: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-    password:  {
+    profile_picture: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: true
 		},
+    phone_number: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
+    gender: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    birthdate: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'user'
+    },
+    subscribed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+
   }, {
     sequelize,
     modelName: 'User',
     tableName: 'Users',
-    paranoid:false,
-    timestamps: true
   });
   return User;
 };
