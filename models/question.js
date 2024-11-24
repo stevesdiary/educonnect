@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Question.associate = (models) => { 
+        Question.belongsTo(models.User, { foreignKey: 'user_id' }); 
+        Question.hasMany(models.Answer, { foreignKey: 'question_id' }); 
+      };
     }
   }
   Question.init({
@@ -36,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-    image_url:  {
+    file_url:  {
 			type: DataTypes.STRING,
 			allowNull: true
 		},
@@ -44,8 +47,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Question',
     tableName: 'Questions',
-    timestamps: true,
-    paranoid: false,
   });
   return Question;
 };

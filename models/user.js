@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.associate = (models) => {
+        User.hasMany(models.Question, { foreignKey: 'user_id' });
+        User.hasMany(models.Answer, { foreignKey: 'user_id' });
+        User.belongsToMany(models.Badge, { through: 'UserBadge', foreignKey: 'user_id' });
+      };
     }
   }
   User.init({
@@ -29,9 +33,14 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
       unique: true,
 		},
+    phone: {
+      type: DataTypes.STRING,
+      allowNull : true,
+    },
     email:  {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: false,
+      unique: true
 		},
     password:  {
 			type: DataTypes.STRING,
@@ -41,8 +50,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
     tableName: 'Users',
-    paranoid:false,
-    timestamps: true
   });
   return User;
 };
