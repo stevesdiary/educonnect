@@ -3,16 +3,23 @@ const { Op } = require('sequelize');
 const { userService } = require('../services/userService');
 const bcrypt = require("bcrypt");
 const salt = 10;
+const { createUserSchema } = require("../validator/validator");
+
 const userController = {
 	createUser: async (req, res, next) => {
 		try {
-			const { name, username, email, password, confirm_password, profile_picture, gender, phone_number, birthdate, type, subscribed } = req.body;
+			const { error, value } = createUserSchema.validate(req.body, { abortEarly: false }); 
+			if (error) { 
+				console.error('Validation Error:', error.details);
+				return res.status(400).json({ message: 'Validation Error', errors: error.details }); 
+			}
+			const { name, username, email, password, confirm_password, profile_picture, gender, phone, birthdate, type, subscribed } = req.body;
 			let sex = gender.toLowerCase();
 			if (password !== confirm_password) {
 				return res.status(400).json({ message: "Passwords do not match" });
 			}
 			const hashed = await bcrypt.hash(password, salt);
-			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone_number, birthdate, type, subscribed};
+			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone, birthdate, type, subscribed};
 			const createUser = await userService.createUser(payload);
 
 			if (!createUser) {
@@ -25,6 +32,7 @@ const userController = {
 			
 			
 		} catch (error) {
+			
 			console.log(error);
 			return res.status(500).json({
 				message: 'An error occurred while creating the user',
@@ -62,6 +70,7 @@ const userController = {
 				data: (users.data)
 			});
 		} catch (error) {
+			
 			console.error("Error fetching users:", error);
 				return res.status(500).json({
 					message: 'Internal Server Error',
@@ -95,6 +104,7 @@ const userController = {
 			const result = await userService.deleteOne(req.params.id);
 			return res.status(result.status).send({ message: (result.message)});
 		} catch (error) {
+			
 			console.error("Error", error)
 			return res.status(500).json({
 				message : "Error occured",
