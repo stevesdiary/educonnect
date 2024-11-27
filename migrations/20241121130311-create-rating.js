@@ -1,18 +1,22 @@
 'use strict';
+
+const user = require('../models/user');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('ratings', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       value: {
         type: Sequelize.INTEGER
       },
       user_id: {
+
         type: Sequelize.INTEGER,
         references: { 
           model: {

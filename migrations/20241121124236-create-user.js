@@ -26,7 +26,33 @@ module.exports = {
         allowNull: true,
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      profile_picture: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      phone_number: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      birthdate: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+      gender: {
+        type: Sequelize.ENUM('male', 'female'),
+        allowNull: false,
+      },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'user'
+      },
+      subscribed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       profile_picture: {
         type: Sequelize.STRING,

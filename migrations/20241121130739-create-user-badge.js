@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('user_badges', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -17,7 +17,6 @@ module.exports = {
           }, 
           key: 'id' 
         },
-        allowNull: false,
       },
       badge_id: {
         type: Sequelize.INTEGER,

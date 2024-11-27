@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
 		},
-    name:  {
+    name: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-    username:  {
+    username: {
 			type: DataTypes.STRING,
 			allowNull: false,
       unique: true,
@@ -40,12 +40,14 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: false,
       unique: true
+
 		},
-    password:  {
+    password: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
     profile_picture: {
+
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -76,11 +78,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false
     },
+
   }, {
     sequelize,
     modelName: 'User',
     tableName: 'users',
     timestamps: true,
+
   });
   return User;
 };
