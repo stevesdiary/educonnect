@@ -7,10 +7,10 @@ const config = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
-  // ssl: {
-  //   require: true,
-  //   rejectUnauthorized: false,
-  // },
+  ssl: {
+    require: true,
+    rejectUnauthorized: false,
+  },
 };
 
 const db = new Pool(config);
