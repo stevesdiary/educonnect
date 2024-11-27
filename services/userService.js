@@ -19,7 +19,7 @@ const userService = {
 				}
 		}
 			const createUser = await User.create(payload);
-			const { createdAt, updatedAt, password: _, ...userData } = createUser.dataValues;
+			const { createdAt, updatedAt, birthdate, password: _, ...userData } = createUser.dataValues;
 			return { status: 201, message: "User record created!", data: userData };
 		} catch (error) {
 			console.log("Service error", error);

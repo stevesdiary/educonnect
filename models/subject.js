@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Subject.init({
     id: {
-			type: DataTypes.UUID,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+			autoIncrement: true
 		},
     name: {
 			type: DataTypes.STRING,
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Subject',
-    tableName: 'Subjects',
+    tableName: 'subjects',
   });
   return Subject;
 };

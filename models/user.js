@@ -10,18 +10,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.associate = (models) => { User.hasMany(models.Question, { foreignKey: 'user_id' });
-      User.hasMany(models.Answer, { foreignKey: 'user_id' });
-      User.belongsToMany(models.Badge, { through: 'UserBadge', foreignKey: 'user_id' });
-    };
+      User.associate = (models) => {
+        User.hasMany(models.Question, { foreignKey: 'user_id' });
+        User.hasMany(models.Answer, { foreignKey: 'user_id' });
+        User.belongsToMany(models.Badge, { through: 'UserBadge', foreignKey: 'user_id' });
+      };
     }
   }
   User.init({
-    id: {
-			type: DataTypes.UUID,
-			primaryKey: true,
-			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+    id:{
+			type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
 		},
     name: {
 			type: DataTypes.STRING,
@@ -32,30 +32,41 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
       unique: true,
 		},
-    email: {
+    phone: {
+      type: DataTypes.STRING,
+      allowNull : true,
+    },
+    email:  {
 			type: DataTypes.STRING,
 			allowNull: false,
-      unique: true,
+      unique: true
+
 		},
     password: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
     profile_picture: {
-			type: DataTypes.STRING,
-			allowNull: true
-		},
-    phone_number: {
-      type: DataTypes.BIGINT,
+
+      type: DataTypes.STRING,
       allowNull: true,
     },
     gender: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.ENUM(['male', 'female']),
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     },
     birthdate: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
     type: {
       type: DataTypes.STRING,
@@ -71,7 +82,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-    tableName: 'Users',
+    tableName: 'users',
+    timestamps: true,
+
   });
   return User;
 };

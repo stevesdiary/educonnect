@@ -10,40 +10,46 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Question.associate = (models) => { 
+        Question.belongsTo(models.User, { foreignKey: 'user_id' }); 
+        Question.hasMany(models.Answer, { foreignKey: 'question_id' }); 
+      };
     }
   }
   Question.init({
     id: {
-			type: DataTypes.UUID,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+      autoIncrement: true,
 		},
     title:  {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
     content:  {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			allowNull: false
 		},
     user_id:  {
 			type: DataTypes.STRING,
+      references: { model: 'question', key: 'id' },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
 			allowNull: false
 		},
     subject_id:  {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-    image_url:  {
+    file_url:  {
 			type: DataTypes.STRING,
 			allowNull: true
 		},
   }, {
     sequelize,
     modelName: 'Question',
-    tableName: 'Questions',
+    tableName: 'questions',
   });
   return Question;
 };

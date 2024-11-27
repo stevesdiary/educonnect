@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('User_Badges', {
+    await queryInterface.createTable('user_badges', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -10,16 +10,28 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       user_id: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { 
+          model: {
+            tableName: 'users'
+          }, 
+          key: 'id' 
+        },
       },
       badge_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        references: { 
+          model: {
+            tableName: 'badges'
+          }, 
+          key: 'id' 
+        },
+        allowNull: false
       },
       earned_at: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('User_Badges');
+    await queryInterface.dropTable('user_badges');
   }
 };
