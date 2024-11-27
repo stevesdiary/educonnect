@@ -16,7 +16,7 @@ const authorise = (...allowedRoles) => (req, res, next) => {
 
     const decoded = jwt.verify(token, SECRET);
     // console.log(token)
-    const userRole = decoded.type;
+    const userRole = decoded.role;
 
     if (typeof decoded !== "object" || !allowedRoles.includes(userRole)) {
       return res.status(403).send({ message: 'Forbidden! You are NOT authorised to access this page!' });

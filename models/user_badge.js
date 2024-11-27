@@ -15,17 +15,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   User_Badge.init({
     id: {
-			type: DataTypes.UUID,
-			primaryKey: true,
-			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+			type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull:false
 		},
     user_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     badge_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     earned_at: {

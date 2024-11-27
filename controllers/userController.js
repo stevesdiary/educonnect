@@ -13,13 +13,13 @@ const userController = {
 				console.error('Validation Error:', error.details);
 				return res.status(400).json({ message: 'Validation Error', errors: error.details }); 
 			}
-			const { name, username, email, password, confirm_password, profile_picture, gender, phone, birthdate, type, subscribed } = req.body;
+			const { name, username, email, password, confirm_password, profile_picture, gender, phone, birthdate, role, subscribed } = req.body;
 			let sex = gender.toLowerCase();
 			if (password !== confirm_password) {
 				return res.status(400).json({ message: "Passwords do not match" });
 			}
 			const hashed = await bcrypt.hash(password, salt);
-			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone, birthdate, type, subscribed};
+			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone, birthdate, role, subscribed};
 			const createUser = await userService.createUser(payload);
 
 			if (!createUser) {

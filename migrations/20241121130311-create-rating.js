@@ -9,8 +9,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4
+        type: Sequelize.INTEGER,
       },
       value: {
         type: Sequelize.INTEGER
@@ -24,7 +23,6 @@ module.exports = {
           }, 
           key: 'id' 
         },
-        // references: { model: 'users', key: 'id'},
         allowNull: false,
       },
       answer_id: {
@@ -35,7 +33,6 @@ module.exports = {
           }, 
           key: 'id' 
         },
-        // references: { model: 'answers', key: 'id' },
         allowNull: false,
       },
       createdAt: {
