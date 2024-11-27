@@ -15,13 +15,12 @@ const authentication = async (req, res, next) => {
   
   try {
     const decoded = jwt.verify(token, secret);
-    // console.log("Decoded Token:", decoded);
     
     if (decoded) {
       req.user = {
         id: decoded.id,
         email: decoded.email,
-        type: decoded.type
+        role: decoded.role
       };
       next();
     } else {

@@ -42,13 +42,13 @@ module.exports = {
         allowNull: true
       },
       gender: {
-        type: Sequelize.ENUM('male', 'female'),
-        allowNull: false,
-      },
-      type: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: 'user'
+      },
+      role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'student'
       },
       subscribed: {
         type: Sequelize.BOOLEAN,
@@ -68,9 +68,6 @@ module.exports = {
       },
       is_active: {
         type: Sequelize.BOOLEAN,
-      },
-      type: {
-        type: Sequelize.STRING,
       },
       subscribed: {
         type: Sequelize.BOOLEAN,

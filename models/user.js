@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
 		},
     name: {
 			type: DataTypes.STRING,
@@ -68,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    type: {
+    role: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'user'
