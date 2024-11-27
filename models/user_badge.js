@@ -35,6 +35,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'UserBadge',
+    tableName: 'user_badges',
+    timestamps: true,
   });
   return User_Badge;
 };

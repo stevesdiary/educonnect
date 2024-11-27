@@ -19,10 +19,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init({
     id:{
-			type: DataTypes.UUID,
-			primaryKey: true,
-			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+			type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
 		},
     name:  {
 			type: DataTypes.STRING,
@@ -46,10 +45,42 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
+    profile_picture: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    gender: {
+      type: DataTypes.ENUM(['male', 'female']),
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
+    birthdate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'user'
+    },
+    subscribed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
   }, {
     sequelize,
     modelName: 'User',
-    tableName: 'Users',
+    tableName: 'users',
+    timestamps: true,
   });
   return User;
 };

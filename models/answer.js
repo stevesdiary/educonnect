@@ -18,23 +18,27 @@ module.exports = (sequelize, DataTypes) => {
   }
   Answer.init({
     id: {
-			type: DataTypes.UUID,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+      autoIncrement: true
 		},
     content: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			allowNull: false
 		},
     user_id:  {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
       references: { model: 'users', key: 'id', },
-			allowNull: false
+			allowNull: false,
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
 		},
     question_id:  {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
       references: { model: 'questions', key: 'id', },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
 			allowNull: false
 		},
     upvote:  {
@@ -45,14 +49,15 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: true
 		},
-    saved: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true
-    },
+    // saved: {
+    //   type: DataTypes.BOOLEAN,
+    //   allowNull: true
+    // },
   }, {
     sequelize,
     modelName: 'Answer',
-    tablename: 'Answers',
+    tableName: 'answers',
+    timestamps: true,
   });
   return Answer;
 };

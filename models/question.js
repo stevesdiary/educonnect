@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Question.init({
     id: {
-			type: DataTypes.UUID,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+      autoIncrement: true,
 		},
     title:  {
 			type: DataTypes.STRING,
@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
 		},
     user_id:  {
 			type: DataTypes.STRING,
+      references: { model: 'question', key: 'id' },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
 			allowNull: false
 		},
     subject_id:  {
@@ -46,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Question',
-    tableName: 'Questions',
+    tableName: 'questions',
   });
   return Question;
 };

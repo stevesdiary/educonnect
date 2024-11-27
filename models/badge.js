@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Badge.init({
     id: {
-			type: DataTypes.UUID,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			defaultValue: DataTypes.UUIDV4
+			autoIncrement: true,
 		},
     name:  {
 			type: DataTypes.STRING,
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Badge',
-    tableName: 'Badges'
+    tableName: 'badges'
   });
   return Badge;
 };
