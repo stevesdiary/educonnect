@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Answers', {
+    await queryInterface.createTable('answers', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,28 +13,49 @@ module.exports = {
         type: Sequelize.STRING
       },
       user_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: { 
+          model: {
+            tableName: 'users'
+          }, 
+          key: 'id'},
+        allowNull: false,
       },
       question_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: { 
+          model: {
+            tableName: 'questions'
+          }, 
+          key: 'id' 
+        },
+        allowNull: false
       },
       upvote: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
-      image_url: {
-        type: Sequelize.STRING
+      file_url: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      saved: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Answers');
+    await queryInterface.dropTable('answers');
   }
 };
