@@ -6,7 +6,6 @@ const tokenExpiry = process.env.TOKEN_EXPIRY || '5hours';
 
 const loginController = {
   login: async (req, res) => {
-		console.log("GOT here");
     try{
       const sessions = {}
       const session_id = uuidv4();
@@ -18,18 +17,14 @@ const loginController = {
       const passwordMatch = await bcrypt.compare(password, userData.password);
       if (!passwordMatch) {
         return res.status(401).send({ Message: "Password is not correct, please provide the correct password." });
-      } 
-      // const user = await User.findOne({ where: { email }});
-      // const id = userData.id;
-      // const name = userData.name;
-      // const username = userData.username;
-      // const type = user.type;
+      }
+      const id = userData.id;
       const userInfo = {
         id: userData.id,
         email: userData.email,
       }
-      const accessToken = jwt.sign(userInfo, process.env.JWT_SECRET, {expiresIn: tokenExpiry});
-      sessions[session_id] = { email, user_id: id }
+      const accessToken = jwt.sign(userInfo, process.env.JWT_SECRET, { expiresIn: tokenExpiry });
+      sessions[session_id] = { email, id: userData.id }
       res.set('Set-Cookie', `session=${session_id}`);
       return res.status(200).json({
         statusCode: 200,
@@ -48,11 +43,12 @@ const loginController = {
     try {
       const session_id = req.headers.cookie;
       if (session_id) {
-        await redisClient.del(session_id);
+        // await redisClient.del(session_id);
         res.clearCookie('session');
       }
       return res.status(200).send('Bye 👋, you have successfully logged out')
     } catch (error) {
+			console.log("Error" , error);
       return res.status(500).send({ message: 'An error occoured', error })
     }
   }
