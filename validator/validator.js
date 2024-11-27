@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const phoneRegex = /^(?:\+?234|0)\d{10}$/
 const passwordRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])/
-// const birthdateRegEx = 
+
 
 const subjectSchema = Joi.object({
 	name: Joi.string().required(),
@@ -11,15 +11,16 @@ const questionSchema = Joi.object({
 	title: Joi.string().required(),
 	content: Joi.string().required(),
 	user_id: Joi.string().required(),
-	subject_id: Joi.string().required(),
+	subject_id: Joi.number().required(),
 	image_url: Joi.string().optional(),
+	saved: Joi.boolean().optional(),
 });
 
 const answerSchema = Joi.object({
 	content: Joi.string().required(),
-	user_id: Joi.string().required(),
-	question_id: Joi.string().required(),
+	// question_id: Joi.string().required(),
 	upvote: Joi.number().optional(),
+	saved: Joi.boolean().optional(),
 });
 
 const ratingSchema = Joi.object({
@@ -41,11 +42,30 @@ const createUserSchema = Joi.object({
 	password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).label('Password'),
 	confirm_password: Joi.ref('password'),
 	phone_number: Joi.string().regex(phoneRegex).optional(),
-	profile_picture: Joi.string().optional(),
+	profile_picture: Joi.string().uri().optional().allow(null, ''),
 	gender: Joi.string().required(),
 	birthdate: Joi.date().optional(),
 	type: Joi.string().optional(),
+	is_active: Joi.boolean().optional(),
+	// subscribed: Joi.boolean().required(),
+});
+
+const updateUserSchema = Joi.object({
+	name: Joi.string().min(3).required(),
+	username: Joi.string().alphanum().min(3).required(true),
+	email: Joi.string().email().required(),
+	phone_number: Joi.string().regex(phoneRegex).optional(),
+	profile_picture: Joi.string().optional(),
+	birthdate: Joi.date().optional(),
+	type: Joi.string().optional(),
+	is_active: Joi.boolean().optional(),
 	subscribed: Joi.boolean().required(),
+});
+
+const resetPasswordSchema = Joi.object({
+	old_password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).optional(),
+	new_password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).required(),
+	confirm_password: Joi.ref('new_password'),
 });
 
 const createOrganizerSchema = Joi.object({
@@ -61,7 +81,7 @@ const createOrganizerSchema = Joi.object({
 });
 
 const idSchema = Joi.object({
-	id: Joi.string().uuid({ version: 'uuidv4' }).required().label('id'),
+	id: Joi.number().required().label('id'),
 })
 
 const validate = (schema) => (payload) => {
@@ -72,6 +92,8 @@ const validate = (schema) => (payload) => {
 
 module.exports = { 
 	createUserSchema,
+	updateUserSchema,
+	resetPasswordSchema,
 	questionSchema,
 	ratingSchema,
 	userBadgeSchema,
