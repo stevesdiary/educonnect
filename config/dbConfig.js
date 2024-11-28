@@ -9,7 +9,7 @@ const config = {
   database: process.env.DB_NAME,
   ssl: {
     require: true,
-    rejectUnauthorized: false,
+    rejectUnauthorized: true,
   },
 };
 

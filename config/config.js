@@ -10,7 +10,7 @@ module.exports = {
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
         // ca: process.env.CERTIFICATE
       },
       "connectTimeout": 30000
