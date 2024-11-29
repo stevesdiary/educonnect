@@ -82,7 +82,7 @@ const subjectController = {
 
 	getAll: async (req, res) => {
 		try {
-			const subjects = await subjectService.getAll();
+			const subjects = await subjectService.findAll();
 			return res.status(subjects.status).json({
 				message: (subjects.message),
 				data: (subjects.data)
@@ -98,7 +98,7 @@ const subjectController = {
 
 	getOne: async (req, res) => {
 		try {
-			const result = await subjectService.getOne(req.params.id);
+			const result = await subjectService.findOne(req.params.id);
 			if (!result) {
 				return res.status(result.status).json({
 					message: result.message,
@@ -118,7 +118,7 @@ const subjectController = {
 
 	deleteOne: async (req, res) => {
 		try {
-			const result = await subjectService.deleteOne(req.params.id);
+			const result = await subjectService.delete(req.params.id);
 			return res.status(result.status).send({ message: (result.message)});
 		} catch (error) {
 			console.error("Error", error)
