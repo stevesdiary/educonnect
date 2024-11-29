@@ -6,6 +6,15 @@ const subject = require("../models/subject");
 const questionService = {
   createQuestion: async (payload) => {
     try {
+      const verifiedUser = await User.findOne({
+        where: { 
+          id: payload.user_id ,
+          is_verified: true
+        }
+      });
+      if (!verifiedUser) {
+        return { status: 401, message: " Your email is not yet verified, verify your email and you can ask your questions and give answers too." };
+      }
       const subject = await Subject.findOne({
         where: { name: payload.subject },
         attributes: ['id'],
