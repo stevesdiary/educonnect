@@ -20,11 +20,22 @@ const userController = {
 			}
 			const hashed = await bcrypt.hash(password, salt);
 			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone, birthdate, role, subscribed};
+			const verificationCode = crypto
+        .randomInt(100000, 999999)
+        .toString()
+        .padStart(6, '0');
 			const createUser = await userService.createUser(payload);
 
 			if (!createUser) {
 				return res.status(createUser.status).json({ message: (createUser.message) });
 			}
+			await Verification.create({
+				email: email,
+				code: verificationCode,
+				expires_at: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+			});
+
+			await sendVerificationCode(email, verificationCode);
 			return res.status(createUser.status).json({
 				message: createUser.message,
 				data: createUser.data,
