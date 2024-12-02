@@ -78,7 +78,14 @@ const questionController = {
 
 	getAll: async (req, res) => {
 		try {
-			const questions = await questionService.getAll();
+			const questions = await questionService.getAll({
+				where: {},
+				include: [
+					{ model : Answer,
+						as: 'Answers'
+					}
+				]
+			});
 			return res.status(questions.status).json({
 				message: (questions.message),
 				data: (questions.data)
