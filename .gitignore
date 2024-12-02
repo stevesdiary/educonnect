@@ -1,3 +1,4 @@
 node_modules
 .env
 edr.js
+.vscode/extensions.json
