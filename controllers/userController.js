@@ -1,9 +1,12 @@
-const { Event, User } = require('../models');
+const { Event, User, Verification } = require('../models');
 const { Op } = require('sequelize');
 const { userService } = require('../services/userService');
 const bcrypt = require("bcrypt");
+const sendVerificationCode = require("../services/emailService");
+const crypto = require("crypto");
 const salt = 10;
 const { createUserSchema } = require("../validator/validator");
+const verification = require('../models/verification');
 
 const userController = {
 	createUser: async (req, res, next) => {
@@ -20,16 +23,27 @@ const userController = {
 			}
 			const hashed = await bcrypt.hash(password, salt);
 			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone, birthdate, role, subscribed};
+			const verificationCode = crypto
+        .randomInt(100000, 999999)
+        .toString()
+        .padStart(6, '0');
 			const createUser = await userService.createUser(payload);
 
 			if (!createUser) {
 				return res.status(createUser.status).json({ message: (createUser.message) });
 			}
+			await Verification.create({
+				email: email,
+				code: verificationCode,
+				expires_at: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+			});
+
+			const emailResponse = await sendVerificationCode(email, verificationCode);
 			return res.status(createUser.status).json({
 				message: createUser.message,
+				emailMessage: emailResponse.message,
 				data: createUser.data,
 			});
-			
 			
 		} catch (error) {
 			
@@ -38,6 +52,34 @@ const userController = {
 				message: 'An error occurred while creating the user',
 				error: error
 			});
+		}
+	},
+	
+	verifyEmail: async (req, res) => {
+		try {
+			const { email, code } = req.query;
+			const verificationRecord = await Verification.findOne({ 
+				where: { 
+					email,
+					code,
+					expires_at: { [Op.gt]: new Date() }
+				} 
+			});
+			// console.log(verificationRecord, email, code);
+			if (!verificationRecord) {
+				return res.status(404).json({ message: 'Invalid or expired verification code' });
+			}
+			await User.update(
+				{is_verified: true},
+				{where: { email: email }}
+			)
+
+			// await verificationRecord.destroy();
+			const loginRoute = process.env.LOGIN_URL;
+			res.redirect (`${loginRoute}?email=${email}&password=`)
+			// return res.status(200).json({ message: "Email verified successfully, proceed to login" });
+		} catch (error) {
+			
 		}
 	},
 
@@ -49,7 +91,7 @@ const userController = {
 			if (!user) {
 				return res.status(404).json({ message: `User with email: ${req.params.email} not found` });
 			}
-			const { first_name, last_name, phone_number } = req.body;
+			const { name, username, phone_number } = req.body;
 			if (first_name !== last_name) {
 				await user.update(updateData);
 				return res.status(user.status).json({
@@ -58,7 +100,8 @@ const userController = {
 				});
 			}
 		} catch (error) {
-			
+			console.error(error);
+			return res.status(500).json({ message: "Error", data: error });
 		}
 	},
 

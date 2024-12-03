@@ -69,6 +69,10 @@ module.exports = {
       is_active: {
         type: Sequelize.BOOLEAN,
       },
+      is_verified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       subscribed: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

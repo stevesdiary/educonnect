@@ -41,7 +41,6 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: false,
       unique: true
-
 		},
     password: {
 			type: DataTypes.STRING,
@@ -73,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'user'
+    },
+    is_verified:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     subscribed: {
       type: DataTypes.BOOLEAN,

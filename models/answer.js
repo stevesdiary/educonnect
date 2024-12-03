@@ -49,10 +49,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: true
 		},
-    // saved: {
-    //   type: DataTypes.BOOLEAN,
-    //   allowNull: true
-    // },
+    saved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
   }, {
     sequelize,
     modelName: 'Answer',
