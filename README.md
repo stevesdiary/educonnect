@@ -1,4 +1,4 @@
-# educonnect
+# EduConnect
 Students Knowledge Hub for peer learning.
 
 
@@ -9,4 +9,5 @@ EduConnect aims to solve this by creating an open platform where students can as
 2.Upvotes & Badges: Students can upvote helpful answers, encouraging quality content. 
 3.Subject Categories & Search: Questions are organised by subject categories (e.g., math, biology, history) for easy browsing. 
 4.A search bar allows students to quickly find specific topics or questions.
-5. There is an attachment button on the questions and anwers field where charts and illustrations can be added to clarify or reference questions and answers
+5. There is an attachment button on the questions and anwers field where charts and illustrations can be added to clarify or reference questions and answers.
+6. More features will be added.
