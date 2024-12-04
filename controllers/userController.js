@@ -21,6 +21,23 @@ const userController = {
 			if (password !== confirm_password) {
 				return res.status(400).json({ message: "Passwords do not match" });
 			}
+			// const emailExists = await User.findOne({
+			// 	where: {
+			// 		email: req.body.email,
+			// 	}
+			// });
+			const emailExists = await User.findOne({ where: { email } });
+			if (emailExists) {
+				return res.status(400).json({ 
+					message: `Email ${email} already exists, please login with your password.` 
+				});
+			}
+			const usernameExists = await User.findOne({ where: { username } });
+			if (usernameExists) {
+				return res.status(400).json({ 
+					message: `Username ${username} already exists, choose another username (username can include numbers)` 
+				});
+			}
 			const hashed = await bcrypt.hash(password, salt);
 			const payload = { name, username, email, password: hashed, profile_picture, gender: sex, phone, birthdate, role, subscribed};
 			const verificationCode = crypto
@@ -28,10 +45,6 @@ const userController = {
         .toString()
         .padStart(6, '0');
 			const createUser = await userService.createUser(payload);
-
-			if (!createUser) {
-				return res.status(createUser.status).json({ message: (createUser.message) });
-			}
 			await Verification.create({
 				email: email,
 				code: verificationCode,
@@ -44,7 +57,10 @@ const userController = {
 				emailMessage: emailResponse.message,
 				data: createUser.data,
 			});
-			
+			if (!createUser || createUser.status !== 200) {
+				console.log("Error occured, user not created");
+				return res.status(createUser.status).json({ message: (createUser.message) });
+			}
 		} catch (error) {
 			
 			console.log(error);
@@ -71,13 +87,13 @@ const userController = {
 			}
 			await User.update(
 				{is_verified: true},
-				{where: { email: email }}
+				{where: { email }}
 			)
 
-			// await verificationRecord.destroy();
-			const loginRoute = process.env.LOGIN_URL;
-			res.redirect (`${loginRoute}?email=${email}&password=`)
-			// return res.status(200).json({ message: "Email verified successfully, proceed to login" });
+			await verificationRecord.destroy();
+			// const loginRoute = process.env.LOGIN_URL;
+			// res.redirect (`${loginRoute}?email=${email}&password=`)
+			return res.status(200).json({ message: "Email verified successfully, proceed to login" });
 		} catch (error) {
 			
 		}
@@ -113,7 +129,6 @@ const userController = {
 				data: (users.data)
 			});
 		} catch (error) {
-			
 			console.error("Error fetching users:", error);
 				return res.status(500).json({
 					message: 'Internal Server Error',
