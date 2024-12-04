@@ -2,19 +2,17 @@ const { User, Question } = require('../models');
 const { Op } = require('sequelize');
 const  questionService  = require('../services/questionService');
 const questionSchema = require("../validator/validator");
-// const validate 
 const bcrypt = require("bcrypt");
 const { userService } = require('../services/userService');
 const salt = 10;
 const questionController = {
 	createQuestion: async (req, res) => { 
 		try {
-			const { title, content, subject, fileUrl } = req.body; 
+			const { topic, content, subject, fileUrl } = req.body; 
 			const userId = req.user.id; 
-			// console.log("USERID", userId);
-			const payload = { title, content, user_id: userId, subject, fileUrl }; 
+			const payload = { topic, content, user_id: userId, subject, fileUrl }; 
 			const createQuestion = await questionService.createQuestion(payload); 
-			if (createQuestion.status !== 200) { 
+			if (createQuestion.status !== (201 || 200)) { 
 				console.log("Oops! Question not created");
 				return res.status(createQuestion.status).json({ message: createQuestion.message }); 
 			} 
@@ -78,7 +76,7 @@ const questionController = {
 
 	getAll: async (req, res) => {
 		try {
-			const questions = await questionService.getAll({
+			const questions = await questionService.geAll({
 				where: {},
 				include: [
 					{ model : Answer,
