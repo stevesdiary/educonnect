@@ -1,6 +1,6 @@
 # EduConnect
 Students Knowledge Hub for peer learning.
-
+Documentation can be accessed here: https://docs.google.com/document/d/1E8xai5ZqqCmexNUI6vRT21X0M7LmPd2TFBip-TF0L0M/edit?usp=sharing
 
 In many public secondary schools across Africa, students often struggle to get quick answers to their study questions. 
 Whether it’s understanding a tricky math concept, solving a science problem, or needing advice on study techniques, there’s a gap in accessible, student-friendly resources. 
@@ -10,4 +10,5 @@ EduConnect aims to solve this by creating an open platform where students can as
 3.Subject Categories & Search: Questions are organised by subject categories (e.g., math, biology, history) for easy browsing. 
 4.A search bar allows students to quickly find specific topics or questions.
 5. There is an attachment button on the questions and anwers field where charts and illustrations can be added to clarify or reference questions and answers.
-6. More features will be added.
+6. Groups based on topics, categories or knowlege are also created and can be joined by students as desired.
+7. More features will be added.

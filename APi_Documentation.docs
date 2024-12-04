@@ -1,6 +1,8 @@
+
 Overview
 The Peer Learning Platform allows high school students to ask questions, provide answers, engage in group discussions, and earn ratings and badges based on their contributions.
 
+The Doc file can be viewed here https://docs.google.com/document/d/1E8xai5ZqqCmexNUI6vRT21X0M7LmPd2TFBip-TF0L0M/edit?usp=sharing
 Base URL
 https://www.educonnect.com
 
@@ -9,13 +11,30 @@ All API requests require authentication via a Bearer token. Users must sign up a
 
 Authentication Endpoints
 Signup
+
 URL: /auth/signup
 Method: POST
 Request Body:
 
 
 {
-  "username": "string",
   "email": "string",
-  "password": "string"
+  "password": "string",
+	"confirm_password": "string"
 }
+
+Response:
+if successful
+status: 201 
+message: 'Record Created'
+
+if failed
+status: 400 
+message: 'Bad Request'
+Reasons: (if validation fails)
+
+Signup (with google or facebook Auth)
+
+Response:
+
+
