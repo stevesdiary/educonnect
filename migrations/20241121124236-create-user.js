@@ -33,10 +33,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      phone_number: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
       birthdate: {
         type: Sequelize.DATE,
         allowNull: true
