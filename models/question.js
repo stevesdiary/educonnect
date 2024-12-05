@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
       autoIncrement: true,
 		},
-    title:  {
+    topic:  {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
