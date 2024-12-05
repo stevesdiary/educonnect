@@ -55,10 +55,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM(['male', 'female']),
       allowNull: false,
     },
-    phone: {
-      type: DataTypes.BIGINT,
-      allowNull: true,
-    },
     is_active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
