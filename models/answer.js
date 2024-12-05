@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false
 		},
     upvote:  {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
 			allowNull: true
 		},
     file_url:  {
