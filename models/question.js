@@ -10,11 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Question.associate = (models) => { 
-        Question.belongsTo(models.User, { foreignKey: 'user_id' }); 
-        Question.hasMany(models.Answer, { foreignKey: 'question_id' }); 
-      };
-    }
+      Question.belongsTo(models.User, { foreignKey: 'user_id', as: "questions" });
+      Question.belongsTo(models.Subject, { foreignKey: 'subject_id' });
+      Question.hasMany(models.Answer, { foreignKey: 'question_id', as: 'answers' }); 
+    };
   }
   Question.init({
     id: {
@@ -32,15 +31,16 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false
 		},
     user_id:  {
-			type: DataTypes.STRING,
-      references: { model: 'question', key: 'id' },
+			type: DataTypes.INTEGER,
+      references: { model: 'users', key: 'id' },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
 			allowNull: false
 		},
     subject_id:  {
-			type: DataTypes.STRING,
-			allowNull: false
+			type: DataTypes.INTEGER,
+			allowNull: false,
+      references: { model: 'subjects', key: 'id'},
 		},
     file_url:  {
 			type: DataTypes.STRING,
