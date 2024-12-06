@@ -12,10 +12,6 @@ const questionController = {
 			const userId = req.user.id; 
 			const payload = { topic, content, user_id: userId, subject, fileUrl }; 
 			const createQuestion = await questionService.createQuestion(payload); 
-			if (createQuestion.status !== (201 || 200)) { 
-				console.log("Oops! Question not created");
-				return res.status(createQuestion.status).json({ message: createQuestion.message }); 
-			} 
 			return res.status(createQuestion.status).json({ message: createQuestion.message, data: createQuestion.data, }); 
 		} catch (error) { console.log('Error:', error); 
 			return res.status(500).json({ 
@@ -76,14 +72,7 @@ const questionController = {
 
 	getAll: async (req, res) => {
 		try {
-			const questions = await questionService.geAll({
-				where: {},
-				include: [
-					{ model : Answer,
-						as: 'Answers'
-					}
-				]
-			});
+			const questions = await questionService.allQuestions();
 			return res.status(questions.status).json({
 				message: (questions.message),
 				data: (questions.data)
@@ -99,12 +88,13 @@ const questionController = {
 
 	getOne: async (req, res) => {
 		try {
-			const result = await questionService.getOne(req.params.id);
-			if (!result) {
-				return res.status(result.status).json({
-					message: result.message,
-				});
-			}
+			const result = await questionService.oneQuestion(req.params.id);
+			// if (!result) {
+			// 	return res.status(result.status).json({
+			// 		message: result.message,
+			// 		data: result.data
+			// 	});
+			// }
 			return res.status(result.status).json({
 				message: (result.message),
 				...(result.data && { data: result.data})
@@ -119,7 +109,7 @@ const questionController = {
 
 	deleteOne: async (req, res) => {
 		try {
-			const result = await questionService.deleteOne(req.params.id);
+			const result = await questionService.deleteQuestion(req.params.id);
 			return res.status(result.status).send({ message: (result.message)});
 		} catch (error) {
 			console.error("Error", error)
