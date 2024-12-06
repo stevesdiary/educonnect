@@ -21,11 +21,6 @@ const userController = {
 			if (password !== confirm_password) {
 				return res.status(400).json({ message: "Passwords do not match" });
 			}
-			// const emailExists = await User.findOne({
-			// 	where: {
-			// 		email: req.body.email,
-			// 	}
-			// });
 			const emailExists = await User.findOne({ where: { email } });
 			if (emailExists) {
 				return res.status(400).json({ 
