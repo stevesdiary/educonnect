@@ -1,23 +1,10 @@
 const { validateUser } = require("../middlewares/validate");
-const { User } = require("../models");
+const { User, Question, Answer } = require("../models");
 const userController = require('../controllers/userController');
+const question = require("../models/question");
 const userService = {
 	createUser: async(payload) => {
 		try {
-			const emailExists = await User.findOne({
-				where: {
-					email: payload.email,
-				}
-			});
-			if (emailExists) {
-				const usernameExists = emailExists.username;
-				if (usernameExists === payload.username) {
-					return { 
-						status: 400, 
-						message: `User ${payload.username} already exists, login with this email and password` 
-					};
-				}
-		}
 			const createUser = await User.create(payload);
 			const { createdAt, updatedAt, birthdate, password: _, ...userData } = createUser.dataValues;
 			return { status: 201, message: "User record created!", data: userData };
@@ -33,9 +20,25 @@ const userService = {
 			const userRecord = await User.findAll({
 				attributes: {
 					exclude: ["createdAt", "updatedAt", "password"]
-				}
+				},
+				include: [
+					{
+						model: Question,
+						as: "questions",
+						include: [
+							{
+								model: Answer,
+								as: 'answers'
+							}
+						]
+					}
+				]
 			});
-			return { status:200, message: 'User records found!', data: userRecord };
+			if (userRecord.length === 0) {
+				return { status: 404, message: "No user record found", data: [] };
+			}
+			return { status:200, message: 'User records found! vv', data: userRecord };
+			
 		} catch (error) {
 			console.error("Error fetching users:", error);
 				throw error;
@@ -49,7 +52,19 @@ const userService = {
 				where: { id: payload },
 				attributes: {
 					exclude: ["createdAt", "updatedAt", "password"]
-				}
+				},
+				include: [
+					{
+						model: Question,
+						as: "questions",
+						include: [
+							{
+								model: Answer,
+								as: 'answers'
+							}
+						]
+					}
+				]
 			});
 			if (!userRecord) {
 				return { status: 404, message: 'User record not found' };
