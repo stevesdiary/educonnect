@@ -17,8 +17,6 @@ const userService = {
 	getAll: async(payload) => {
 		try {
 			const { question, answer } = payload;
-			console.log('Question Query Parameter:', question);
-			console.log('Answer Query Parameter:', answer);
 			let includeOptions = [];
 			if (question === 'true') { 
 				const questionInclude = { 

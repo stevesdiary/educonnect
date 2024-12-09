@@ -20,7 +20,7 @@ app.use('/user', userRoute);
 app.use('/question', questionRoute);
 app.use("/subject", subjectRoute);
 app.use('/answer', answerRoute);
-app.get('/test', (req, res, next) => {
+app.get('/', (req, res, next) => {
 	try {
 		return res.status(200).json({
 			message: "Welcome to EDUCONNECT!",
