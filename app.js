@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require("express");
+// const serverless = require("serverless")
 const app = express();
 app.use(express.json())
 const multer = require("multer");
@@ -19,11 +20,11 @@ app.use('/user', userRoute);
 app.use('/question', questionRoute);
 app.use("/subject", subjectRoute);
 app.use('/answer', answerRoute);
-// app.use('/', (req, res, next) => {
-// 	return res.status(200).json({
-// 		message: "Welcome to EDUCONNECT!",
-// 	})
-// });
+app.use('/', (req, res, next) => {
+	return res.status(200).json({
+		message: "Welcome to EDUCONNECT!",
+	})
+});
 app.listen(port, () => {
 	console.log(`App running on port ${port}`);
 });
