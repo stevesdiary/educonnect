@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require("express");
-// const serverless = require("serverless")
+const path = require("path");
 const app = express();
 app.use(express.json())
 const multer = require("multer");
@@ -22,9 +22,7 @@ app.use("/subject", subjectRoute);
 app.use('/answer', answerRoute);
 app.get('/', (req, res, next) => {
 	try {
-		return res.status(200).json({
-			message: "Welcome to EDUCONNECT!",
-		})
+		res.sendFile(path.join(__dirname, 'welcome.html'));
 	} catch (error) {
 		console.log(error);
 		throw error;
