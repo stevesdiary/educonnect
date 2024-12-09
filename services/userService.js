@@ -12,7 +12,6 @@ const userService = {
 			console.log("Service error", error);
 			throw error;
 		}
-
 	},
 
 	getAll: async(req, res) => {

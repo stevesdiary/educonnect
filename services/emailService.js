@@ -24,7 +24,8 @@ async function sendVerificationEmail(email, verificationCode) {
       };
       
     const info = await transporter.sendMail(mailOptions);
-    return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.data };
+    console.log('Message sent: %s', info.messageId);
+    return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.messageId };
     if(!info) {
       console.log("ERROR", info);
       return { status: 400, message: "Unable to send email", error: info };
