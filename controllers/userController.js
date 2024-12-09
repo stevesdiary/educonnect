@@ -145,9 +145,10 @@ const userController = {
 				...(result.data && { data: result.data})
 			});
 		} catch (error) {
+			console.log("Error", error)
 			return res.status(500).json({
 				message : "Error showed up",
-				error : error.message || error
+				error : error
 			})
 		}
 	},

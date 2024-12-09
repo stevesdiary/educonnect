@@ -20,10 +20,16 @@ app.use('/user', userRoute);
 app.use('/question', questionRoute);
 app.use("/subject", subjectRoute);
 app.use('/answer', answerRoute);
-app.use('/', (req, res, next) => {
-	return res.status(200).json({
-		message: "Welcome to EDUCONNECT!",
-	})
+app.get('/test', (req, res, next) => {
+	try {
+		return res.status(200).json({
+			message: "Welcome to EDUCONNECT!",
+		})
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+	
 });
 app.listen(port, () => {
 	console.log(`App running on port ${port}`);
