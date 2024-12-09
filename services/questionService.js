@@ -1,5 +1,5 @@
-const { Question, User, Subject } = require("../models");
-const questionController = require("../controllers/questionController");
+const { Question, User, Subject, Answer } = require("../models");
+// const questionController = require("../controllers/questionController");
 const subject = require("../models/subject");
 
 
@@ -22,7 +22,6 @@ const questionService = {
       if (!subject) {
         throw new Error('Subject not found');
       }
-
       const questionPayload = {
         title: payload.title,
         content: payload.content,
@@ -35,6 +34,25 @@ const questionService = {
       return { status: 200, message: 'Question created successfully', data: createQuestion };
     } catch (error) {
       console.log(error);
+      throw error;
+    }
+  },
+  getAll: async (payload) => {
+    try {
+      const { answer } = payload;
+      let includeOptions = [];
+      if (answer === 'true') { 
+        includeOptions.push({ 
+          model: Answer, 
+          as: 'answers', 
+        }); 
+      }
+      console.log(includeOptions, answer);
+      const question = await Question.findAll({
+        include: includeOptions,
+      })
+      return { status: 200, message: 'Questions fetched successfully', data: question };
+    } catch (error) {
       throw error;
     }
   }
