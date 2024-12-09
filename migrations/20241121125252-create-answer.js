@@ -24,11 +24,9 @@ module.exports = {
       },
       question_id: {
         type: Sequelize.INTEGER,
-        references: { 
-          model: {
-            tableName: 'questions'
-          }, 
-          key: 'id' 
+        references: {
+          model: 'questions',
+          key: 'id'
         },
         allowNull: false
       },

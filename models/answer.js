@@ -10,10 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Answer.associate = (models) => {
-        Answer.belongsTo(models.User, { foreignKey: 'user_id' });
-        Answer.belongsTo(models.Question, { foreignKey: 'question_id' });
-      };
+      Answer.belongsTo(models.User, { foreignKey: 'user_id' });
+      Answer.belongsTo(models.Question, { foreignKey: 'question_id'});
     }
   }
   Answer.init({
@@ -36,13 +34,13 @@ module.exports = (sequelize, DataTypes) => {
 		},
     question_id:  {
 			type: DataTypes.INTEGER,
-      references: { model: 'questions', key: 'id', },
+      references: { model: 'questions', key: 'id' },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
 			allowNull: false
 		},
     upvote:  {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
 			allowNull: true
 		},
     file_url:  {

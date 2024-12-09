@@ -7,31 +7,28 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
-      title: {
+      topic: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       content: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: { 
-          model: {
-            tableName: 'users'
-          }, 
-          key: 'id' 
+        references: {
+          model: 'users',
+          key: 'id'
         },
         allowNull: false,
       },
       subject_id: {
         type: Sequelize.INTEGER,
         references: { 
-          model: {
-            tableName: 'users'
-          },
+          model: 'subjects',
           key: 'id'
         },
         allowNull: false

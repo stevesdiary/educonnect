@@ -10,11 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.associate = (models) => {
-        User.hasMany(models.Question, { foreignKey: 'user_id' });
-        User.hasMany(models.Answer, { foreignKey: 'user_id' });
-        User.belongsToMany(models.Badge, { through: 'UserBadge', foreignKey: 'user_id' });
-      };
+      User.hasMany(models.Question, { foreignKey: 'user_id', as: 'questions' });
+      User.hasMany(models.Answer, { foreignKey: 'user_id', as: 'answers' });
+      User.belongsToMany(models.Badge, { through: 'UserBadge', foreignKey: 'user_id' });
     }
   }
   User.init({
@@ -55,10 +53,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM(['male', 'female']),
       allowNull: false,
     },
-    phone: {
-      type: DataTypes.BIGINT,
-      allowNull: true,
-    },
     is_active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -71,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user'
+      defaultValue: 'student'
     },
     is_verified:{
       type: DataTypes.BOOLEAN,

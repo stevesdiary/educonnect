@@ -11,18 +11,14 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: { 
-          model: {
-            tableName: 'users'
-          }, 
+          model: 'users',
           key: 'id' 
         },
       },
       badge_id: {
         type: Sequelize.INTEGER,
         references: { 
-          model: {
-            tableName: 'badges'
-          }, 
+          model: 'badges',
           key: 'id' 
         },
         allowNull: false
