@@ -13,7 +13,6 @@ const loginController = {
       let { email, password } = req.body;
       email = email.trim();
       const userData = await User.findOne({ where: { email } });
-      console.log("Querying user with email:", email);
 
       if (userData === null) {
         return res.status(404).send({ Message: "Email is not registered or not correct" });

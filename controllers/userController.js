@@ -102,8 +102,8 @@ const userController = {
 			if (!user) {
 				return res.status(404).json({ message: `User with email: ${req.params.email} not found` });
 			}
-			const { name, username, phone_number } = req.body;
-			if (first_name !== last_name) {
+			const { name, username, phone } = req.body;
+			if (name || username || phone) {
 				await user.update(updateData);
 				return res.status(user.status).json({
 					message: (user.message),
@@ -118,7 +118,8 @@ const userController = {
 
 	getAll: async (req, res) => {
 		try {
-			const users = await userService.getAll();
+			const payload = req.query;
+			const users = await userService.getAll(payload);
 			return res.status(users.status).json({
 				message: (users.message),
 				data: (users.data)
