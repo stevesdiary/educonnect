@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const sendVerificationCode = require("../services/emailService");
 const crypto = require("crypto");
 const salt = 10;
-const { createUserSchema } = require("../validator/validator");
+const { createUserSchema, validate } = require("../validator/validator");
 const verification = require('../models/verification');
 
 const userController = {
