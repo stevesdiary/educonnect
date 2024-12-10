@@ -9,6 +9,7 @@ const salt = 10;
 const answerController = {
 	createAnswer: async (req, res, next) => {
 		try {
+			
 			const { error, value } = answerSchema.validate(req.body, { abortEarly: false });
 			if (error) {
 				console.log('ValidationError', error);
@@ -17,7 +18,6 @@ const answerController = {
 			const { content, file_url } = req.body;
 			const user_id = req.user.id;
 			const question_id = req.params.question_id;
-			console.log("question_id", question_id);
 
 			const payload = { content, user_id, question_id, file_url };
 			const createAnswer = await answerService.createAnswer(payload);
@@ -40,14 +40,19 @@ const answerController = {
 
 	updateAnswer: async (req, res,) => {
 		try {
+			const { error, value } = answerSchema.validate(req.body, { abortEarly: false });
+			if (error) {
+				console.log('ValidationError', error);
+				return res.status(400).json({ message: error.details[0].message });
+			}
 			const id = req.params.id;
 			const updateData = req.body;
 			const answer = await answerService.findOne(id, updateData);
 			if (!answer) {
-				return res.status(404).json({ message: `Answer with email: ${req.params.email} not found` });
+				return res.status(404).json({ message: `Answer not found` });
 			}
-			const { first_name, last_name, phone_number } = req.body;
-			if (first_name !== last_name) {
+			const { content } = req.body;
+			if (content) {
 				await answer.update(updateData);
 				return res.status(answer.status).json({
 					message: (answer.message),
@@ -55,13 +60,14 @@ const answerController = {
 				});
 			}
 		} catch (error) {
-			
+			console.log("Error ocurred", error);
+			throw error;
 		}
 	},
 
 	getAll: async (req, res) => {
 		try {
-			const answers = await answerService.getAll();
+			const answers = await answerService.getAnswers();
 			return res.status(answers.status).json({
 				message: (answers.message),
 				data: (answers.data)
