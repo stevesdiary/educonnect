@@ -5,11 +5,6 @@ const answerController = require("../controllers/answerController");
 const answerService = {
   createAnswer: async (payload) => {
     try {
-      // const question_id = payload.question_id;
-      //  await Question.findOne({
-      //   where: { title: payload.subject },
-      //   attributes: ['id'],
-      // });
       const answerPayload = {
         content: payload.content,
         user_id: payload.user_id,
@@ -27,11 +22,36 @@ const answerService = {
 
 	getAnswers: async () => {
 		try {
-			// const 
+			const getAnswers = await Answer.findAll()
+      return { status: 200, message: "Answers!", data: getAnswers };
 		} catch (error) {
-			
+			console.log(error)
+      throw error;
 		}
-	}
+	},
+  getOne: async (payload) => {
+    try {
+      const answer = await Answer.findOne({payload})
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  deleteOne: async (payload) => {
+    try {
+      const removeAnswer = await Answer.destroy({
+        where: { id: payload }
+      });
+      if (removeAnswer < 1) {
+				console.log("Record not found");
+				return { status: 404, message: "Record was not found or already deleted" };
+			}
+      return { status: 200, message: "Record deleted", data: removeAnswer };
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 };
 
 module.exports = { answerService };
