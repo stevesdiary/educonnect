@@ -1,4 +1,4 @@
-const { Subject, User } = require("../models");
+const { Subject, User, Answer } = require("../models");
 const subjectController = require("../controllers/subjectController");
 
 const subjectService = {
@@ -27,17 +27,13 @@ const subjectService = {
 
   findOne: async (payload) => {
     try {
-      const subjeect = await Subject.findOne({
+      const subject = await Subject.findOne({
         where: { name: payload.name },
-        include: {
-          model: Answer,
-          as: 'Answers'
-        }
       });
-      return { status: 200, message: 'Subject found', data: subjeect };
-      if (!subjeect) {
+      if (!subject || subject.length < 1) {
         return { status: 404, message: 'Subject not found' };
       }
+      return { status: 200, message: 'Subject found', data: subject };
     } catch (error) {
       console.log('Error', error);
       throw error;
@@ -46,7 +42,11 @@ const subjectService = {
 
   findAll: async (payload) => {
     try {
-      const subjects = await Subject.findAll();
+      const subjects = await Subject.findAll({
+				attributes: {
+					exclude: ['createdAt', 'updatedAt']
+				}
+			});
       if(subjects.length === 0) {
         return { status: 404, message: 'subjects not found'}
       }
@@ -58,7 +58,7 @@ const subjectService = {
 
   delete: async (payload) => {
     try {
-      const deleteSubject = await Subject.destroy({ where: { name: payload.name }});
+      const deleteSubject = await Subject.destroy({ where: { id: payload.id }});
       if(deleteSubject < 1) {
         return { status: 404, message: 'Record not found or already deleted!'}
       }
@@ -70,4 +70,3 @@ const subjectService = {
 };
 
 module.exports = subjectService;
-
