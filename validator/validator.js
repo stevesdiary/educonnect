@@ -8,19 +8,17 @@ const subjectSchema = Joi.object({
 });
 
 const questionSchema = Joi.object({
-	title: Joi.string().required(),
+	topic: Joi.string().required(),
 	content: Joi.string().required(),
 	user_id: Joi.string().required(),
 	subject_id: Joi.number().required(),
-	image_url: Joi.string().optional(),
+	fileUrl: Joi.string().optional(),
 	saved: Joi.boolean().optional(),
 });
 
 const answerSchema = Joi.object({
 	content: Joi.string().required(),
-	// question_id: Joi.string().required(),
-	upvote: Joi.number().optional(),
-	saved: Joi.boolean().optional(),
+	fileUrl: Joi.string().optional(),
 });
 
 const ratingSchema = Joi.object({
@@ -35,6 +33,15 @@ const userBadgeSchema = Joi.object({
 	earned_at: Joi.date().required(),
 });
 
+const signUpSchema = Joi.object({
+	email: Joi.string().required(),
+	password: Joi.string().required().pattern(passwordRegEx),
+});
+
+const messageSchema = Joi.object({
+	content: Joi.string().required(),
+})
+
 const createUserSchema = Joi.object({
 	name: Joi.string().min(3).required(),
 	username: Joi.string().alphanum().min(3).required(true),
@@ -47,7 +54,6 @@ const createUserSchema = Joi.object({
 	birthdate: Joi.date().optional(),
 	type: Joi.string().optional(),
 	is_active: Joi.boolean().optional(),
-	// subscribed: Joi.boolean().required(),
 });
 
 const updateUserSchema = Joi.object({
@@ -67,7 +73,11 @@ const resetPasswordSchema = Joi.object({
 	new_password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).required(),
 	confirm_password: Joi.ref('new_password'),
 });
-
+const passwordResetSchema = Joi.object({
+	email: Joi.string().email().required().messages({ 'string.email': 'A valid email is required.', 'any.required': 'Email is required.', }),
+	password: Joi.string().min(6).required().messages({ 'string.min': 'Password must be at least 6 characters long.', 'any.required': 'Password is required.', }),
+	confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({ 'any.only': 'Passwords do not match.', 'any.required': 'Confirm password is required.', }),
+});
 const createOrganizerSchema = Joi.object({
 	first_name: Joi.string().min(3).required(),
 	last_name: Joi.string().min(3),
@@ -91,6 +101,7 @@ const validate = (schema) => (payload) => {
 
 
 module.exports = { 
+	signUpSchema,
 	createUserSchema,
 	updateUserSchema,
 	resetPasswordSchema,
@@ -99,6 +110,7 @@ module.exports = {
 	userBadgeSchema,
 	validate,
 	idSchema,
+	messageSchema,
 	answerSchema,
 	subjectSchema 
 };
