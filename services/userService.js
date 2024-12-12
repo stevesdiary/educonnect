@@ -75,13 +75,13 @@ const userService = {
 		}
 	},
 
-	update: async(user_id, payload) => {
+	update: async(id, updateData) => {
 		try {
 			const user = await User.findOne({ 
-				where: { id: user_id },
+				where: { id },
 			});
 			if (!user){
-				console.log("Sorry, the user record id was not found");
+				console.log("User record not found");
 				return res.status(404).json({ message: "Oops!, user not found." });
 			}
 			await user.update(updateData)
@@ -102,11 +102,7 @@ const userService = {
 				console.log("User not found");
 				return { status: 404, message: "User record was not found or already deleted" };
 			}
-
-			console.log("User deleted", deleteUser);
 			return { status: 200, message: "Record deleted", data: deleteUser };
-		
-			return deleteUser;
 		} catch (error) {
 			throw error;
 		}

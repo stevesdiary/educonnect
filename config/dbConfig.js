@@ -9,10 +9,10 @@ const config = {
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
   logging: console.log,
-  ssl: {
-    require: true,
-    rejectUnauthorized: false,
-  },
+  // ssl: {
+  //   require: true,
+  //   rejectUnauthorized: false,
+  // },
 };
 
 const db = new Pool(config)
