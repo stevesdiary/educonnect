@@ -6,7 +6,7 @@ const { answerSchema, idSchema } = require('../validator/validator');
 const { authentication } = require('../middlewares/authentication');
 
 router.post('/create/:question_id', authentication, answerController.createAnswer);
-router.get ('/allanswers/:id', authentication, answerController.getAll);
+router.get ('/allanswers', authentication, answerController.getAll);
 router.get('/getone/:id', authentication, answerController.getOne); 
 router.patch('/update/:id', authentication, answerController.updateAnswer);
 router.delete('/deleteanswer/:id', authentication, answerController.deleteOne);
