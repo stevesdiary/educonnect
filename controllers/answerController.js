@@ -61,6 +61,7 @@ const answerController = {
 
 	getAll: async (req, res) => {
 		try {
+			//const payload = req.params.id
 			const answers = await answerService.getAll();
 			return res.status(answers.status).json({
 				message: (answers.message),
