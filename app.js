@@ -10,11 +10,10 @@ const subjectRoute = require("./routes/subjectRoute");
 const questionRoute = require("./routes/questionRoute");
 const answerRoute = require("./routes/answerRoute");
 
-const port = process.env.LOCAL_PORT || 5100;
+const port = 5200;
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.use('/user', userRoute);
 app.use('/question', questionRoute);
