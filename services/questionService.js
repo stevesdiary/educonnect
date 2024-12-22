@@ -43,9 +43,13 @@ const questionService = {
     }
   },
 
-  allQuestions: async (req, res) => {
+  allQuestions: async (payload) => {
     try {
+      const search = payload.content;
       const allQuestions = await Question.findAll({
+        where: {
+          content: { [Op.like]: search }
+        },
         include: [
           {
 						model: Answer,
