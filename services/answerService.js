@@ -20,9 +20,14 @@ const answerService = {
     }
   },
 
-	getAnswers: async () => {
+	getAnswers: async (payload) => {
 		try {
-			const getAnswers = await Answer.findAll()
+      const search = payload.content;
+			const getAnswers = await Answer.findAll({
+        where: { content: 
+          { [Op.like]: search }
+        }
+      })
       return { status: 200, message: "Answers!", data: getAnswers };
 		} catch (error) {
 			console.log(error)

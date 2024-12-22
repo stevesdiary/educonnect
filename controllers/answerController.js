@@ -67,7 +67,8 @@ const answerController = {
 
 	getAll: async (req, res) => {
 		try {
-			const answers = await answerService.getAnswers();
+			const payload = req.query;
+			const answers = await answerService.getAnswers(payload);
 			return res.status(answers.status).json({
 				message: (answers.message),
 				data: (answers.data)
