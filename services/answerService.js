@@ -23,15 +23,21 @@ const answerService = {
 	getAnswers: async (payload) => {
 		try {
       const search = payload.content;
-			const getAnswers = await Answer.findAll({
+			const answers = await Answer.findAll({
         where: { content: 
           { [Op.like]: search }
         }
       })
-      return { status: 200, message: "Answers!", data: getAnswers };
+// 			const answers = await Answer.findAll(); 
+			if (answers.length < 1) {
+			  return { status: 200, message: "Records found"}
+			};
+			if (!answers || answers === null) {
+			  return { status: 400, message: "Records not found", data: [] };
+			}
 		} catch (error) {
-			console.log(error)
-      throw error;
+			console.log(error);
+			throw error;
 		}
 	},
   getOne: async (payload) => {

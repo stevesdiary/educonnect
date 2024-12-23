@@ -12,32 +12,35 @@ const userService = {
 			console.log("Service error", error);
 			throw error;
 		}
-
 	},
 
-	getAll: async(req, res) => {
+	getAll: async(payload) => {
 		try {
-			const userRecord = await User.findAll({
-				attributes: {
-					exclude: ["createdAt", "updatedAt", "password"]
-				},
-				include: [
-					{
-						model: Question,
-						as: "questions",
-						include: [
-							{
-								model: Answer,
-								as: 'answers'
-							}
-						]
-					}
-				]
-			});
+			const { question, answer } = payload;
+			let includeOptions = [];
+			if (question === 'true') { 
+				const questionInclude = { 
+					model: Question,
+					as: 'questions', }; 
+					
+					if (answer === 'true') {
+						questionInclude.include = [
+							{ model: Answer, 
+								as: 'answers', 
+							}, 
+						]; 
+					} 
+					includeOptions.push(questionInclude); 
+				} 
+				const userRecord = await User.findAll({
+					attributes: {
+						exclude: ['createdAt', 'updatedAt', 'password'], 
+					}, include: includeOptions,
+				});
 			if (userRecord.length === 0) {
 				return { status: 404, message: "No user record found", data: [] };
 			}
-			return { status:200, message: 'User records found! vv', data: userRecord };
+			return { status:200, message: 'User records found!', data: userRecord };
 			
 		} catch (error) {
 			console.error("Error fetching users:", error);

@@ -23,7 +23,6 @@ const questionService = {
       if (!subject) {
         throw new Error('Subject not found');
       }
-
       const questionPayload = {
         topic: payload.topic,
         content: payload.content,
@@ -104,6 +103,27 @@ const questionService = {
         return { status: 404, message: 'Question not found or deleted' };
       }
       return { status: 200, message: 'Record deleted', data: question };
+    }
+    catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  
+  getAll: async (payload) => {
+    try {
+      const { answer } = payload;
+      let includeOptions = [];
+      if (answer === 'true') { 
+        includeOptions.push({ 
+          model: Answer, 
+          as: 'answers', 
+        }); 
+      }
+      const question = await Question.findAll({
+        include: includeOptions,
+      })
+      return { status: 200, message: 'Questions fetched successfully', data: question };
     } catch (error) {
       throw error;
     }

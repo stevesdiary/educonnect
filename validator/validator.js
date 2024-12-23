@@ -48,7 +48,7 @@ const createUserSchema = Joi.object({
 	email: Joi.string().email().required(),
 	password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).label('Password'),
 	confirm_password: Joi.ref('password'),
-	phone_number: Joi.string().regex(phoneRegex).optional(),
+	phone: Joi.string().regex(phoneRegex).optional(),
 	profile_picture: Joi.string().uri().optional().allow(null, ''),
 	gender: Joi.string().required(),
 	birthdate: Joi.date().optional(),
