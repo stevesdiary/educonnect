@@ -39,6 +39,7 @@
     "netlify-cli": "^17.38.0",
     "netlify-lambda": "^2.0.16",
     "nodemailer": "^6.9.16",
+    "nodemon": "^3.1.9",
     "passport": "^0.7.0",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",
@@ -48,6 +49,10 @@
     "sequelize": "^6.37.5",
     "serverless": "^4.4.14",
     "serverless-http": "^3.2.0",
+    "socket.io": "^4.8.1",
     "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }

@@ -20,9 +20,15 @@ const answerService = {
     }
   },
 
-	getAnswers: async () => {
+	getAnswers: async (payload) => {
 		try {
-			const answers = await Answer.findAll(); 
+      const search = payload.content;
+			const answers = await Answer.findAll({
+        where: { content: 
+          { [Op.like]: search }
+        }
+      })
+// 			const answers = await Answer.findAll(); 
 			if (answers.length < 1) {
 			  return { status: 200, message: "Records found"}
 			};
@@ -33,7 +39,30 @@ const answerService = {
 			console.log(error);
 			throw error;
 		}
-	}
+	},
+  getOne: async (payload) => {
+    try {
+      const answer = await Answer.findOne({payload})
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  deleteOne: async (payload) => {
+    try {
+      const removeAnswer = await Answer.destroy({
+        where: { id: payload }
+      });
+      if (removeAnswer < 1) {
+				console.log("Record not found");
+				return { status: 404, message: "Record was not found or already deleted" };
+			}
+      return { status: 200, message: "Record deleted", data: removeAnswer };
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 };
 
 module.exports = { answerService };

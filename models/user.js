@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
     username: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
       unique: true,
 		},
     phone: {
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     gender: {
       type: DataTypes.ENUM(['male', 'female']),
-      allowNull: false,
+      allowNull: true,
     },
     is_active: {
       type: DataTypes.BOOLEAN,
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     birthdate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     role: {
       type: DataTypes.STRING,

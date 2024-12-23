@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const sendVerificationCode = require("../services/emailService");
 const crypto = require("crypto");
 const salt = 10;
-const { createUserSchema } = require("../validator/validator");
+const { createUserSchema, updateUserSchema, validate } = require("../validator/validator");
 const verification = require('../models/verification');
 
 const userController = {
@@ -76,7 +76,6 @@ const userController = {
 					expires_at: { [Op.gt]: new Date() }
 				} 
 			});
-			// console.log(verificationRecord, email, code);
 			if (!verificationRecord) {
 				return res.status(404).json({ message: 'Invalid or expired verification code' });
 			}
@@ -85,9 +84,11 @@ const userController = {
 				{where: { email }}
 			)
 
-			await verificationRecord.destroy();
-			// const loginRoute = process.env.LOGIN_URL;
-			// res.redirect (`${loginRoute}?email=${email}&password=`)
+			await Verification.destroy({
+				where: {
+					expires_at: { [Op.lt]: new Date() }
+				}
+			});
 			return res.status(200).json({ message: "Email verified successfully, proceed to login" });
 		} catch (error) {
 			
@@ -98,12 +99,18 @@ const userController = {
 		try {
 			const id = req.params.id;
 			const updateData = req.body;
-			const user = await userService.findOne(id, updateData);
+			const { error, value } = createUserSchema.validate(req.body, { abortEarly: false }); 
+			if (error) { 
+				console.error('Validation Error:', error.details);
+				return res.status(400).json({ message: 'Validation Error', errors: error.details }); 
+			}
+			const user = await userService.update(id, updateData);
 			if (!user) {
 				return res.status(404).json({ message: `User with email: ${req.params.email} not found` });
 			}
 			const { name, username, phone } = req.body;
-			if (name || username || phone) {
+			if (!(name || username || phone)) {
+
 				await user.update(updateData);
 				return res.status(user.status).json({
 					message: (user.message),

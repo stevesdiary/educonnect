@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const tokenExpiry = process.env.TOKEN_EXPIRY || '5hours';
+const axios = require("axios");
+const { CLIENT_ID, REDIRECT_URI } = process.env;
 
 const loginController = {
   login: async (req, res) => {
@@ -55,6 +57,15 @@ const loginController = {
     } catch (error) {
       console.log("Error", error);
       return res.status(500).send({ message: 'An error occurred', error });
+    }
+  },
+
+  google: async (req, res) => {
+    try {
+      const url =  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile email`;
+      res.redirect(url);
+    } catch (error) {
+      throw error;
     }
   }
 };
