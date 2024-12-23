@@ -4,7 +4,6 @@ const subjectController = require("../controllers/subjectController");
 const subjectService = {
   createSubject: async (payload) => {
     try {
-			console.log("PAYLOAD", payload.name);
       const subject = await Subject.findOne({
         where: { name: payload.name },
         attributes: ['name'],
