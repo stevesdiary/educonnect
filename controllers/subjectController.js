@@ -15,8 +15,7 @@ const subjectController = {
 				return res.status(400).json({ message: error.details}); //[0].message
 			}
 			const { name } = req.body; 
-			const userId = req.user.id; 
-			console.log("USERID", userId);
+			const userId = req.user.id;
 			const payload = { name }; 
 			const createSubject = await subjectService.createSubject(payload); 
 			if (createSubject.status !== 200) { 

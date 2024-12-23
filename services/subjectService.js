@@ -4,13 +4,12 @@ const subjectController = require("../controllers/subjectController");
 const subjectService = {
   createSubject: async (payload) => {
     try {
-			console.log("PAYLOAD", payload.name);
       const subject = await Subject.findOne({
         where: { name: payload.name },
         attributes: ['name'],
       });
       if (subject) {
-        throw new Error(`${payload.name} already exists`);
+        throw new Error(`${subject.name} already exists`);
       }
 
       const subjectPayload = {
@@ -43,6 +42,9 @@ const subjectService = {
   findAll: async (payload) => {
     try {
       const subjects = await Subject.findAll({
+        where: { name: {
+          [Op.like]: payload
+        }},
 				attributes: {
 					exclude: ['createdAt', 'updatedAt']
 				}
