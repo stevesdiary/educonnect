@@ -73,7 +73,7 @@ const questionController = {
 	getAll: async (req, res) => {
 		try {
 			const payload = req.query;
-			const questions = await questionService.getAll(payload);
+			const questions = await questionService.allQuestions(payload);
 			return res.status(questions.status).json({
 				message: (questions.message),
 				data: (questions.data)
