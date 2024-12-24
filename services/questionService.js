@@ -127,6 +127,21 @@ const questionService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  deleteQuestion: async (payload) => {
+    try {
+      const removeQuestion = await Question.destroy({
+        where: { id: payload } 
+        });
+      if (removeQuestion.length < 1 ) {
+        return {status: 404, message: 'Record not found or deleted', data: [] };
+      }
+      return { status: 200, message: 'Record deleted', data: deleteQuestion}
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 };
 
