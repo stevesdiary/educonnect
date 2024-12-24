@@ -1,7 +1,5 @@
 const { validateUser } = require("../middlewares/validate");
 const { User, Question, Answer } = require("../models");
-const userController = require('../controllers/userController');
-const question = require("../models/question");
 const userService = {
 	createUser: async(payload) => {
 		try {
