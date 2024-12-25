@@ -95,16 +95,16 @@ const userService = {
 
 	deleteOne: async(payload) => {
 		try {
-			const id = payload;
 			const deleteUser = await User.destroy({
 				where: { id: payload }
 			});
-			if (deleteUser < 1) {
+			if (deleteUser.length < 1) {
 				console.log("User not found");
 				return { status: 404, message: "User record was not found or already deleted" };
 			}
 			return { status: 200, message: "Record deleted", data: deleteUser };
 		} catch (error) {
+			console.log('Error', error);
 			throw error;
 		}
 	},
