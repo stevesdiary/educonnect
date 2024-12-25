@@ -1,5 +1,6 @@
 const { error } = require('console');
 const nodemailer = require('nodemailer');
+const USER = process.env.USER;
 
 async function sendVerificationEmail(email, verificationCode) {
   try {
@@ -8,7 +9,7 @@ async function sendVerificationEmail(email, verificationCode) {
       port: 587,
       // secure: false,
       auth: {
-        user: '80de56001@smtp-brevo.com',
+        user: USER,
         pass: process.env.API_KEY,
       },
     });
