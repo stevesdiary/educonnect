@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 const url = process.env.DB_URL;
+const Redis = require('ioredis');
 
 const config = {
   user: process.env.DB_USER,
@@ -26,5 +27,17 @@ async function connectDatabase() {
   }
 }
 
+const redis = new Redis();
+async function connectRedis() {
+  redis.set('test-key', 'Hello, Redis');
+  redis.get('trst-key', (err, result) => {
+    if (err) {
+      console.log('Error', err)
+    }
+    console.log('Redis connected:', result)
+  })
+}
+
 connectDatabase();
-module.exports = { connectDatabase };
+connectRedis();
+module.exports = { connectDatabase, connectRedis };
