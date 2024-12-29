@@ -6,7 +6,7 @@ const { authentication } = require("../middlewares/authentication");
 const { loginController } = require('../controllers/loginController');
 
 
-router.post('/create', userController.createUser);
+router.post('/create', authentication, userController.createUser);
 router.post("/verify-email", userController.verifyEmail);
 router.post("/login", loginController.login);
 router.post("/logout", loginController.logout);
