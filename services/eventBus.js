@@ -1,4 +1,4 @@
-const { EventEmmiter} = require("events");
-const eventBus = new EventEmmiter();
+// const { EventEmmiter} = require("events");
+// // const eventBus = new EventEmmiter();
 
-module.exports = {eventBus};
+// module.exports = {eventBus};
