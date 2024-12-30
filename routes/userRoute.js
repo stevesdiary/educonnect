@@ -6,12 +6,12 @@ const { authentication } = require("../middlewares/authentication");
 const { loginController } = require('../controllers/loginController');
 
 
-router.post('/create', authentication, userController.createUser);
+router.post('/create', userController.createUser);
 router.post("/verify-email", userController.verifyEmail);
 router.post("/login", loginController.login);
 router.post("/logout", loginController.logout);
 router.get ('/allusers', userController.getAll);
 router.get('/getone/:id', userController.getOne);
-router.patch('/update/:id', userController.updateUser);
+router.patch('/update/:id', authentication, userController.updateUser);
 router.delete('/delete/:id', userController.deleteOne);
 module.exports = router;
