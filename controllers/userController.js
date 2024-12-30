@@ -48,16 +48,17 @@ const userController = {
 			const verificationPayload = {
 				email,
 				code: verificationCode,
-				subect: "Email Verification",
+				subject: `EduConnect Email Verification`,
 				text: `Your verification code is: ${verificationCode} 
       		Please click on the link below to verify your email: ' ${domain}?email=${email}&code=${verificationCode} '
       		Note that this code will expire in 10 minutes`
 			}
-			const emailResponse = await sendVerificationCode(email, verificationPayload);
-			if (!createUser || createUser.status !== 200) {
+			
+			if (!createUser) {
 				console.log("Error occured, user not created");
 				return res.status(createUser.status).json({ message: (createUser.message) });
 			}
+			const emailResponse = await sendVerificationCode(verificationPayload);
 			return res.status(createUser.status).json({
 				message: createUser.message,
 				emailMessage: emailResponse.message,
@@ -91,13 +92,19 @@ const userController = {
 				{is_verified: true},
 				{where: { email }}
 			)
+			const verificationPayload = {
+				email: email,
+				subject: `Welcome to EduConnect`,
+				text: `Your verification email has been successfully verified.`
+			}
+			const emailResponse = await sendVerificationCode(verificationPayload);
 
 			await Verification.destroy({
 				where: {
 					expires_at: { [Op.lt]: new Date() }
 				}
 			});
-			return res.status(200).json({ message: "Email verified successfully, proceed to login" });
+			return res.status(200).json({ message: "Email verified successfully, proceed to login", data: emailResponse });
 		} catch (error) {
 			
 		}
