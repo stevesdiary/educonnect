@@ -1,12 +1,12 @@
-const { Event, User, Verification } = require('../models');
+const { User, Verification } = require('../models');
 const { Op } = require('sequelize');
 const { userService } = require('../services/userService');
 const bcrypt = require("bcrypt");
 const sendVerificationCode = require("../services/emailService");
 const crypto = require("crypto");
 const salt = 10;
+const domain = process.env.DOMAIN
 const { createUserSchema, updateUserSchema, validate } = require("../validator/validator");
-const verification = require('../models/verification');
 
 const userController = {
 	createUser: async (req, res, next) => {
@@ -45,17 +45,26 @@ const userController = {
 				code: verificationCode,
 				expires_at: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
 			});
-
-			const emailResponse = await sendVerificationCode(email, verificationCode);
+			const verificationPayload = {
+				email,
+				code: verificationCode,
+				subject: `EduConnect Email Verification`,
+				text: `Your verification code is: ${verificationCode} 
+      		Please click on the link below to verify your email: ' ${domain}?email=${email}&code=${verificationCode} '
+      		Note that this code will expire in 10 minutes`
+			}
+			
+			if (!createUser) {
+				console.log("Error occured, user not created");
+				return res.status(createUser.status).json({ message: (createUser.message) });
+			}
+			const emailResponse = await sendVerificationCode(verificationPayload);
 			return res.status(createUser.status).json({
 				message: createUser.message,
 				emailMessage: emailResponse.message,
 				data: createUser.data,
 			});
-			if (!createUser || createUser.status !== 200) {
-				console.log("Error occured, user not created");
-				return res.status(createUser.status).json({ message: (createUser.message) });
-			}
+			
 		} catch (error) {
 			
 			console.log(error);
@@ -83,13 +92,19 @@ const userController = {
 				{is_verified: true},
 				{where: { email }}
 			)
+			const verificationPayload = {
+				email: email,
+				subject: `Welcome to EduConnect`,
+				text: `Your verification email has been successfully verified.`
+			}
+			const emailResponse = await sendVerificationCode(verificationPayload);
 
 			await Verification.destroy({
 				where: {
 					expires_at: { [Op.lt]: new Date() }
 				}
 			});
-			return res.status(200).json({ message: "Email verified successfully, proceed to login" });
+			return res.status(200).json({ message: "Email verified successfully, proceed to login", data: emailResponse });
 		} catch (error) {
 			
 		}

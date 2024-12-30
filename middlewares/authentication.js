@@ -15,7 +15,6 @@ const authentication = async (req, res, next) => {
   
   try {
     const decoded = jwt.verify(token, secret);
-    
     if (decoded) {
       req.user = {
         id: decoded.id,
@@ -24,7 +23,6 @@ const authentication = async (req, res, next) => {
       };
       next();
     } else {
-      console.log("Invalid token");
       return res.status(403).send({
         message: 'Invalid or expired token, or some error occurred'
       });

@@ -2,19 +2,18 @@ const { error } = require('console');
 const nodemailer = require('nodemailer');
 const USER = process.env.USER;
 
-async function sendVerificationEmail(email, verificationCode) {
+async function sendVerificationEmail(verificationPayload) {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SERVER,
       port: 587,
       // secure: false,
       auth: {
-        user: USER,
-        pass: process.env.API_KEY,
+        user: '80de56001@smtp-brevo.com',
+        pass: process.env.PASSWORD,
       },
     });
 
-    const domain = process.env.DOMAIN
     const mailOptions = {
       from: '80de56001@smtp-brevo.com',
       to: email,
@@ -31,7 +30,6 @@ async function sendVerificationEmail(email, verificationCode) {
       return { status: 400, message: "Unable to send email", error: info };
     }
     return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.messageId };
-    
   } catch (error) {
     console.error('Error sending email:', error);
     throw error;

@@ -11,7 +11,7 @@ const questionService = {
         }
       });
       if (!verifiedUser) {
-        return { status: 401, message: "Oops! Your email is not yet verified, verify your email and you can ask your questions and give answers too." };
+        return { status: 401, message: "Oops!Your email is not yet verified, verify your email and you can ask your questions and give answers too." };
       }
       const subject = await Subject.findOne({
         where: { name: payload.subject },
