@@ -1,8 +1,5 @@
 const { Question, User, Subject, Answer } = require("../models");
-const questionController = require("../controllers/questionController");
-const subject = require("../models/subject");
-const message = require("../models/message");
-
+const eventBus = require('./eventBus');
 
 const questionService = {
   createQuestion: async (payload) => {
@@ -35,6 +32,7 @@ const questionService = {
       if (!createQuestion) {
         return { status: 400, message: 'Oops! Question not created', data: null };
       }
+      eventBus.emit('question.posted', createQuestion)
       return { status: 200, message: 'Question created successfully', data: createQuestion };
     } catch (error) {
       console.log(error);
@@ -125,6 +123,21 @@ const questionService = {
       })
       return { status: 200, message: 'Questions fetched successfully', data: question };
     } catch (error) {
+      throw error;
+    }
+  },
+
+  deleteQuestion: async (payload) => {
+    try {
+      const removeQuestion = await Question.destroy({
+        where: { id: payload } 
+        });
+      if (removeQuestion.length < 1 ) {
+        return {status: 404, message: 'Record not found or deleted', data: [] };
+      }
+      return { status: 200, message: 'Record deleted', data: deleteQuestion}
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   }

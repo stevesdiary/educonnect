@@ -110,7 +110,8 @@ const questionController = {
 
 	deleteOne: async (req, res) => {
 		try {
-			const result = await questionService.deleteQuestion(req.params.id);
+			const payload = req.params.id;
+			const result = await questionService.deleteQuestion(payload);
 			return res.status(result.status).send({ message: (result.message)});
 		} catch (error) {
 			console.error("Error", error)

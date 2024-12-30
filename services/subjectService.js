@@ -61,7 +61,7 @@ const subjectService = {
   delete: async (payload) => {
     try {
       const deleteSubject = await Subject.destroy({ where: { id: payload.id }});
-      if(deleteSubject < 1) {
+      if(deleteSubject.length < 1) {
         return { status: 404, message: 'Record not found or already deleted!'}
       }
       return { status: 200, message: 'Record deleted!', data: deleteSubject };
