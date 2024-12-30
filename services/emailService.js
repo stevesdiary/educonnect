@@ -16,7 +16,7 @@ async function sendVerificationEmail(email, verificationCode) {
 
     const domain = process.env.DOMAIN
     const mailOptions = {
-      from: process.env.SENDER,
+      from: '80de56001@smtp-brevo.com',
       to: email,
       subject: 'Verification Code',
       text: `Your verification code is: ${verificationCode} 
@@ -26,11 +26,12 @@ async function sendVerificationEmail(email, verificationCode) {
       
     const info = await transporter.sendMail(mailOptions);
     console.log('Message sent: %s', info.messageId);
-    return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.messageId };
     if(!info) {
       console.log("ERROR", info);
       return { status: 400, message: "Unable to send email", error: info };
     }
+    return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.messageId };
+    
   } catch (error) {
     console.error('Error sending email:', error);
     throw error;
