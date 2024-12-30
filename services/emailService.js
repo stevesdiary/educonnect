@@ -9,7 +9,7 @@ async function sendVerificationEmail(verificationPayload) {
       // secure: false,
       auth: {
         user: '80de56001@smtp-brevo.com',
-        pass: process.env.API_KEY,
+        pass: process.env.PASSWORD,
       },
     });
 
