@@ -1,7 +1,7 @@
 const { error } = require('console');
 const nodemailer = require('nodemailer');
 
-async function sendVerificationEmail(email, verificationCode) {
+async function sendVerificationEmail(verificationPayload) {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SERVER,
@@ -13,23 +13,20 @@ async function sendVerificationEmail(email, verificationCode) {
       },
     });
 
-    const domain = process.env.DOMAIN
     const mailOptions = {
       from: process.env.SENDER,
-      to: email,
-      subject: 'Verification Code',
-      text: `Your verification code is: ${verificationCode} 
-      Please click on the link below to verify your email: ' ${domain}?email=${email}&code=${verificationCode} '
-      Note that this code will expire in 10 minutes`,
+      to: verificationPayload.email,
+      subject: verificationPayload.subject,
+      text: verificationPayload.text,
       };
       
     const info = await transporter.sendMail(mailOptions);
-    console.log('Message sent: %s', info.messageId);
-    return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.messageId };
+    console.log('Message sent: ', info.messageId);
     if(!info) {
       console.log("ERROR", info);
       return { status: 400, message: "Unable to send email", error: info };
     }
+    return { status: 200, message: `Verification email sent successfully, check your email for the verification code and link`, data: info.messageId };
   } catch (error) {
     console.error('Error sending email:', error);
     throw error;
