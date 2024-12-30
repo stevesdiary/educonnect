@@ -1,12 +1,12 @@
-const { Event, User, Verification } = require('../models');
+const { User, Verification } = require('../models');
 const { Op } = require('sequelize');
 const { userService } = require('../services/userService');
 const bcrypt = require("bcrypt");
 const sendVerificationCode = require("../services/emailService");
 const crypto = require("crypto");
 const salt = 10;
+const domain = process.env.DOMAIN
 const { createUserSchema, updateUserSchema, validate } = require("../validator/validator");
-const verification = require('../models/verification');
 
 const userController = {
 	createUser: async (req, res, next) => {
@@ -16,7 +16,7 @@ const userController = {
 				console.error('Validation Error:', error.details);
 				return res.status(400).json({ message: 'Validation Error', errors: error.details }); 
 			}
-			const { name, username, email, password, confirm_password, profile_picture, gender, phone, birthdate, role, subscribed } = req.body;
+			const { name, username, email, password, confirm_password, profile_picture, gender, phone, birthdate, role, subscribed } = value;
 			let sex = gender.toLowerCase();
 			if (password !== confirm_password) {
 				return res.status(400).json({ message: "Passwords do not match" });
@@ -45,17 +45,25 @@ const userController = {
 				code: verificationCode,
 				expires_at: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
 			});
-
-			const emailResponse = await sendVerificationCode(email, verificationCode);
+			const verificationPayload = {
+				email,
+				code: verificationCode,
+				subect: "Email Verification",
+				text: `Your verification code is: ${verificationCode} 
+      		Please click on the link below to verify your email: ' ${domain}?email=${email}&code=${verificationCode} '
+      		Note that this code will expire in 10 minutes`
+			}
+			const emailResponse = await sendVerificationCode(email, verificationPayload);
+			if (!createUser || createUser.status !== 200) {
+				console.log("Error occured, user not created");
+				return res.status(createUser.status).json({ message: (createUser.message) });
+			}
 			return res.status(createUser.status).json({
 				message: createUser.message,
 				emailMessage: emailResponse.message,
 				data: createUser.data,
 			});
-			if (!createUser || createUser.status !== 200) {
-				console.log("Error occured, user not created");
-				return res.status(createUser.status).json({ message: (createUser.message) });
-			}
+			
 		} catch (error) {
 			
 			console.log(error);
