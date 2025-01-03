@@ -9,7 +9,7 @@ const domain = process.env.DOMAIN
 const { createUserSchema, updateUserSchema, validate } = require("../validator/validator");
 
 const userController = {
-	createUser: async (req, res, next) => {
+	registerUser: async (req, res, next) => {
 		try {
 			const { error, value } = createUserSchema.validate(req.body, { abortEarly: false }); 
 			if (error) { 
@@ -51,7 +51,7 @@ const userController = {
 				subject: `EduConnect Email Verification`,
 				text: `Your verification code is: ${verificationCode} 
       		Please click on the link below to verify your email: ' ${domain}?email=${email}&code=${verificationCode} '
-      		Note that this code will expire in 10 minutes`
+      		Note that this code will expire in 10 minutes.Check your spam folder if you can't find the email in your inbox.`
 			}
 			
 			if (!createUser) {
@@ -113,8 +113,9 @@ const userController = {
 	updateUser: async (req, res,) => {
 		try {
 			const id = req.params.id;
-			const updateData = req.body;
-			const { error, value } = createUserSchema.validate(req.body, { abortEarly: false }); 
+		
+			const { error, value } = updateUserSchema.validate(req.body, { abortEarly: false }); 
+			const updateData = value;
 			if (error) { 
 				console.error('Validation Error:', error.details);
 				return res.status(400).json({ message: 'Validation Error', errors: error.details }); 
@@ -123,7 +124,7 @@ const userController = {
 			if (!user) {
 				return res.status(404).json({ message: `User with email: ${req.params.email} not found` });
 			}
-			const { name, username, phone } = req.body;
+			const { name, username, phone } = value;
 			if (!(name || username || phone)) {
 
 				await user.update(updateData);
