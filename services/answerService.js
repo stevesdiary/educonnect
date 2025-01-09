@@ -1,5 +1,5 @@
 const { Answer, User, Subject } = require("../models");
-const answerController = require("../controllers/answerController");
+const { getFromRedis, saveToRedis } = require("../config/redisConfig");
 
 
 const answerService = {
