@@ -9,12 +9,12 @@ const saltRounds = 10;
 const passwordResetController = {
   resetPassword: async (req, res) => {
     const { token } = req.params;
-    const { password: newPassword, email } = req.body;
+    
     const { error, value } = passwordResetSchema.validate(req.body, { abortEarly: false});
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-
+    const { password: newPassword, email } = value;
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const decodedEmail = decoded?.email;
