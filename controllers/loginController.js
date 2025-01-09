@@ -53,7 +53,7 @@ const loginController = {
         // await redisClient.del(session_id);
         res.clearCookie('session');
       }
-      return res.status(200).send('Bye 👋, you have successfully logged out');
+      return res.status(200).send('Bye, you have successfully logged out');
     } catch (error) {
       console.log("Error", error);
       return res.status(500).send({ message: 'An error occurred', error });
