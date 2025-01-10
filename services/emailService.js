@@ -16,11 +16,9 @@ async function sendVerificationEmail(verificationPayload) {
 
     const mailOptions = {
       from: '80de56001@smtp-brevo.com',
-      to: email,
-      subject: 'Verification Code',
-      text: `Your verification code is: ${verificationCode} 
-      Please click on the link below to verify your email: ' ${domain}?email=${email}&code=${verificationCode} '
-      Note that this code will expire in 10 minutes`,
+      to: verificationPayload.email,
+      subject: verificationPayload.subject,
+      text: verificationPayload.text
       };
       
     const info = await transporter.sendMail(mailOptions);
