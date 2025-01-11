@@ -9,7 +9,13 @@ let redisClient = null;
 async function initializeRedisConnection() {
   if (!redisClient) {
     redisClient = redis.createClient({
-      url: process.env.REDIS_URL
+      url: process.env.REDIS_URL,
+      retryStrategy: (times) => {
+        if (times >= 5) {
+          return null; // End the retrying after 5 attempts
+        }
+        return Math.min(times * 1000, 3000); // Retry after increasing delays (1s, 2s, 3s, ...)
+      },
     });
 
     redisClient.on('connect', () => {
