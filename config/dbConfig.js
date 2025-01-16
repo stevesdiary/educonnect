@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 const url = process.env.DB_URL;
-const createClient = require('redis');
+const cloudinary = require('cloudinary');
 
 const config = {
   user: process.env.DB_USER,
@@ -26,7 +26,20 @@ async function connectDatabase() {
     console.error('Error executing query', err);
   }
 }
+async function connectCloudinary() {
+  try {
+    cloudinary.v2.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
+  } catch (error) {
+    console.error('Error connecting to Cloudinary', error);
+  }
+}
 
+connectCloudinary();
 connectDatabase();
 // connectRedis();
-module.exports = { connectDatabase };
+module.exports = { connectDatabase, connectCloudinary };
