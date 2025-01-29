@@ -1,11 +1,13 @@
 const { User, Answer } = require('../models');
 const { Op } = require('sequelize');
+const bcrypt = require("bcrypt");
+
 const { answerService } = require('../services/answerService');
 const { answerSchema } = require("../validator/validator");
-// const validate 
-const bcrypt = require("bcrypt");
 const { userService } = require('../services/userService');
+
 const salt = 10;
+
 const answerController = {
 	createAnswer: async (req, res, next) => {
 		try {
