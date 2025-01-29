@@ -20,34 +20,6 @@ const questionController = {
 		} 
 	},
 
-	// createQuestion: async (req, res, next) => {
-	// 	try {
-	// 		// const { error, value } = questionSchema.validate(req.body, {abortEarly: false});
-	// 		// if (error) {
-	// 		// 	console.log('ValidationError', error);
-	// 		// 	return res.status(400).json({ message: error.details[0].message });
-	// 		// }
-	// 		const user_id = req.user.id;
-	// 		console.log("user_id");
-	// 		const { title, content, subject, file_url } = req.body;
-	// 		const payload = { title, content, user_id, subject_id, file_url };
-	// 		const createQuestion = await questionService.createQuestion(payload);
-
-	// 		if (!createQuestion) {
-	// 			return res.status(createQuestion.status).json({ message: (createQuestion.message) });
-	// 		}
-	// 		return res.status(createQuestion.status).json({
-	// 			message: createQuestion.message,
-	// 			data: createQuestion.data,
-	// 		});
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 		return res.status(500).json({
-	// 			message: 'An error occurred while creating the question',
-	// 			error: error
-	// 		});
-	// 	}
-	// },
 
 	updateQuestion: async (req, res,) => {
 		try {
