@@ -41,5 +41,4 @@ async function connectCloudinary() {
 
 connectCloudinary();
 connectDatabase();
-// connectRedis();
 module.exports = { connectDatabase, connectCloudinary };
