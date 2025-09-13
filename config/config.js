@@ -8,11 +8,11 @@ module.exports = {
     "host": process.env.DB_HOST,
     "dialect": "postgres",
     dialectOptions: {
-      // ssl: {
-      //   require: true,
-      //   rejectUnauthorized: true,
-      //   // ca: process.env.CERTIFICATE
-      // },
+      ssl: {
+        require: true,
+        rejectUnauthorized: true,
+        // ca: process.env.CERTIFICATE
+      },
       "connectTimeout": 30000
     },
   },
