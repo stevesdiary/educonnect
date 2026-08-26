@@ -39,7 +39,7 @@
 - [x] Implement `chatController.js` and add chat routes to `app.js`
 - [x] Standardise HTTP status codes across all services: `201` for resource creation, `200` for successful reads/updates, `404` for not found
 
-## Task 7 — Validator Fixes
-- [ ] Add `role` and `subscribed` fields to `createUserSchema` — the controller destructures them from the validated value but the schema does not declare them
-- [ ] Add `file_url` to `answerSchema` — the controller sends it in the payload but the schema does not allow it, causing validation to strip or reject it
-- [ ] Rename `passwordResetSchema` or `resetPasswordSchema` — both exist and the naming collision causes the wrong one to be exported/imported
+## Task 7 — Validator Fixes ✅
+- [x] Add `role` and `subscribed` fields to `createUserSchema` — the controller destructures them from the validated value but the schema does not declare them
+- [x] Add `file_url` to `answerSchema` — the controller sends it in the payload but the schema does not allow it, causing validation to strip or reject it
+- [x] Rename `passwordResetSchema` or `resetPasswordSchema` — both exist and the naming collision causes the wrong one to be exported/imported
