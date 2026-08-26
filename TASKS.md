@@ -19,12 +19,12 @@
 - [x] Fix `answerService.getAnswers` — correct the inverted status/message logic and remove the unreachable `!answers` check after the `.length` check
 - [x] Fix `questionService.oneQuestion` — `findOne` returns `null` or an object, not an array; replace `question.length === 0` with `!question`
 
-## Task 4 — Fix Controller Logic Errors
-- [ ] Fix `userController.updateUser` — the condition `if (!(name || username || phone))` is inverted; update should run when fields ARE provided
-- [ ] Fix `questionController.updateQuestion` — remove the copied `first_name / last_name` check; implement a proper ownership check (`question.user_id === req.user.id`)
-- [ ] Fix `subjectController.createSubject` — `subjectSchema` is the full validator export object; destructure correctly: `const { subjectSchema } = require('../validator/validator')`
-- [ ] Fix `userController.verifyEmail` — the catch block is empty; add a proper error response
-- [ ] Fix `userController.verifyEmail` — `storedCode` is referenced from outer scope; declare it locally inside `verifyEmail`
+## Task 4 — Fix Controller Logic Errors ✅
+- [x] Fix `userController.updateUser` — the condition `if (!(name || username || phone))` is inverted; update should run when fields ARE provided
+- [x] Fix `questionController.updateQuestion` — remove the copied `first_name / last_name` check; implement a proper ownership check (`question.user_id === req.user.id`)
+- [x] Fix `subjectController.createSubject` — `subjectSchema` is the full validator export object; destructure correctly: `const { subjectSchema } = require('../validator/validator')`
+- [x] Fix `userController.verifyEmail` — the catch block is empty; add a proper error response
+- [x] Fix `userController.verifyEmail` — `storedCode` is referenced from outer scope; declare it locally inside `verifyEmail`
 
 ## Task 5 — Fix Middleware Issues
 - [ ] Fix `errorHandler.js` — change signature from `(req, res, next)` to `(err, req, res, next)` so Express treats it as an error-handling middleware and `err` is defined
