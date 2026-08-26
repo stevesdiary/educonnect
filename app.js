@@ -7,6 +7,8 @@ app.use(express.json())
 const http = require('http');
 const errorHandler = require('./middlewares/errorHandler');
 const setupChatSocket = require('./socket/chatSocket');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 const userRoute = require('./routes/userRoute');
 const subjectRoute = require('./routes/subjectRoute');
 const questionRoute = require('./routes/questionRoute');
@@ -28,6 +30,7 @@ app.use('/question', questionRoute);
 app.use('/subject', subjectRoute);
 app.use('/answer', answerRoute);
 app.use('/auth', loginRoute);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res, next) => {
 	try {
