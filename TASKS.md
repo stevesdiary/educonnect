@@ -31,13 +31,13 @@
 - [x] Register `errorHandler` in `app.js` after all routes
 - [x] Fix `authentication.js` — catch JWT-specific errors (`JsonWebTokenError`, `TokenExpiredError`) and return 401, not 500
 
-## Task 6 — Clean Up & Consolidate
-- [ ] Remove `loginRoute.js` or mount it in `app.js` — it is currently dead code (never registered)
-- [ ] Remove the raw `pg.Pool` connection from `dbConfig.js`; the app uses only Sequelize via `models/index.js`
-- [ ] Move `nodemon` out of `dependencies` — it belongs only in `devDependencies`
-- [ ] Remove unused imports from controllers: `bcrypt` and `Op` in `questionController`, `answerController`, and `subjectController`; `express` in `passwordResetController`
-- [ ] Implement `chatController.js` and add chat routes to `app.js`
-- [ ] Standardise HTTP status codes across all services: `201` for resource creation, `200` for successful reads/updates, `404` for not found
+## Task 6 — Clean Up & Consolidate ✅
+- [x] Remove `loginRoute.js` or mount it in `app.js` — it is currently dead code (never registered)
+- [x] Remove the raw `pg.Pool` connection from `dbConfig.js`; the app uses only Sequelize via `models/index.js`
+- [x] Move `nodemon` out of `dependencies` — it belongs only in `devDependencies`
+- [x] Remove unused imports from controllers: `bcrypt` and `Op` in `questionController`, `answerController`, and `subjectController`; `express` in `passwordResetController`
+- [x] Implement `chatController.js` and add chat routes to `app.js`
+- [x] Standardise HTTP status codes across all services: `201` for resource creation, `200` for successful reads/updates, `404` for not found
 
 ## Task 7 — Validator Fixes
 - [ ] Add `role` and `subscribed` fields to `createUserSchema` — the controller destructures them from the validated value but the schema does not declare them
