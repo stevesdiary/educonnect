@@ -1,15 +1,15 @@
 # EduConnect — Improvement Task List
 
-## Task 1 — Fix Critical Security Issues
-- [ ] Move Paystack secret key to `.env` as `PAYSTACK_SECRET_KEY`; fix `'Bearer SECRET_KEY'` string to `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
-- [ ] Move hardcoded SMTP user `80de56001@smtp-brevo.com` in `emailService.js` to `.env` as `SMTP_USER`
-- [ ] Add `.env.example` to the repo documenting all required environment variables
+## Task 1 — Fix Critical Security Issues ✅
+- [x] Move Paystack secret key to `.env` as `PAYSTACK_SECRET_KEY`; fix `'Bearer SECRET_KEY'` string to `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+- [x] Move hardcoded SMTP user `80de56001@smtp-brevo.com` in `emailService.js` to `.env` as `SMTP_USER`
+- [x] Add `.env.example` to the repo documenting all required environment variables
 
-## Task 2 — Fix App Boot / Runtime Crashes
-- [ ] Replace `app.listen` with `server.listen` in `app.js` so Socket.io works on the same server instance
-- [ ] Call `setupChatSocket(io)` in `app.js` — it is imported but never invoked
-- [ ] Restore `eventBus.js` (uncomment and fix) or remove the `eventBus.emit('question.posted', ...)` call in `questionService.js` to prevent a crash
-- [ ] Rewrite `uploadService.js` to use CommonJS `require` — the `import` statement crashes in this project
+## Task 2 — Fix App Boot / Runtime Crashes ✅
+- [x] Replace `app.listen` with `server.listen` in `app.js` so Socket.io works on the same server instance
+- [x] Call `setupChatSocket(io)` in `app.js` — it is imported but never invoked
+- [x] Restore `eventBus.js` (uncomment and fix) or remove the `eventBus.emit('question.posted', ...)` call in `questionService.js` to prevent a crash
+- [x] Rewrite `uploadService.js` to use CommonJS `require` — the `import` statement crashes in this project
 
 ## Task 3 — Fix Service Layer Bugs
 - [ ] Remove `res` usage from `userService.update` — return plain `{ status, message, data }` objects like every other service method
