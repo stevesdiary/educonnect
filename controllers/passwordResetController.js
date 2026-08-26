@@ -1,8 +1,7 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { User } = require("../models");
-const { passwordResetSchema, validate } = require("../validator/validator");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { User } = require('../models');
+const { passwordResetSchema } = require('../validator/validator');
 
 const saltRounds = 10;
 

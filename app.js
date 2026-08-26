@@ -7,11 +7,11 @@ app.use(express.json())
 const http = require('http');
 const errorHandler = require('./middlewares/errorHandler');
 const setupChatSocket = require('./socket/chatSocket');
-const db = require("./config/dbConfig");
-const userRoute = require("./routes/userRoute");
-const subjectRoute = require("./routes/subjectRoute");
-const questionRoute = require("./routes/questionRoute");
-const answerRoute = require("./routes/answerRoute");
+const userRoute = require('./routes/userRoute');
+const subjectRoute = require('./routes/subjectRoute');
+const questionRoute = require('./routes/questionRoute');
+const answerRoute = require('./routes/answerRoute');
+const loginRoute = require('./routes/loginRoute');
 const server = http.createServer(app);
 const port = process.env.LOCAL_PORT || 5200;
 const io = new Server(server, {
@@ -21,14 +21,13 @@ const io = new Server(server, {
   }
 });
 
-const bodyParser = require("body-parser");
-app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', userRoute);
 app.use('/question', questionRoute);
-app.use("/subject", subjectRoute);
+app.use('/subject', subjectRoute);
 app.use('/answer', answerRoute);
+app.use('/auth', loginRoute);
 
 app.get('/', (req, res, next) => {
 	try {

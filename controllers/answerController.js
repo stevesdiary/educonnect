@@ -1,121 +1,77 @@
-const { User, Answer } = require('../models');
-const { Op } = require('sequelize');
-const bcrypt = require("bcrypt");
-
 const { answerService } = require('../services/answerService');
-const { answerSchema } = require("../validator/validator");
-const { userService } = require('../services/userService');
-
-const salt = 10;
+const { answerSchema } = require('../validator/validator');
 
 const answerController = {
-	createAnswer: async (req, res, next) => {
-		try {
-			
-			const { error, value } = answerSchema.validate(req.body, { abortEarly: false });
-			if (error) {
-				console.log('ValidationError', error);
-				return res.status(400).json({ message: error.details[0].message });
-			}
-			const { content, file_url } = req.body;
-			const user_id = req.user.id;
-			const question_id = req.params.question_id;
+  createAnswer: async (req, res) => {
+    try {
+      const { error, value } = answerSchema.validate(req.body, { abortEarly: false });
+      if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+      }
+      const payload = {
+        content: value.content,
+        file_url: value.file_url,
+        user_id: req.user.id,
+        question_id: req.params.question_id,
+      };
+      const result = await answerService.createAnswer(payload);
+      return res.status(result.status).json({ message: result.message, data: result.data });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'An error occurred while creating the answer', error: error.message });
+    }
+  },
 
-			const payload = { content, user_id, question_id, file_url };
-			const createAnswer = await answerService.createAnswer(payload);
+  updateAnswer: async (req, res) => {
+    try {
+      const { error, value } = answerSchema.validate(req.body, { abortEarly: false });
+      if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+      }
+      const existing = await answerService.getOne(req.params.id);
+      if (existing.status === 404) {
+        return res.status(404).json({ message: 'Answer not found' });
+      }
+      if (existing.data.user_id !== req.user.id) {
+        return res.status(403).json({ message: 'Forbidden: you can only edit your own answers' });
+      }
+      await existing.data.update(value);
+      return res.status(200).json({ message: 'Answer updated successfully', data: existing.data });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'An error occurred while updating the answer', error: error.message });
+    }
+  },
 
-			if (!createAnswer) {
-				return res.status(createAnswer.status).json({ message: (createAnswer.message) });
-			}
-			return res.status(createAnswer.status).json({
-				message: createAnswer.message,
-				data: createAnswer.data,
-			});
-		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				message: 'An error occurred while creating the answer',
-				error: error
-			});
-		}
-	},
+  getAll: async (req, res) => {
+    try {
+      const answers = await answerService.getAnswers(req.query);
+      return res.status(answers.status).json({ message: answers.message, data: answers.data });
+    } catch (error) {
+      console.error('Error fetching answers:', error);
+      return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+  },
 
-	updateAnswer: async (req, res,) => {
-		try {
-			const { error, value } = answerSchema.validate(req.body, { abortEarly: false });
-			if (error) {
-				console.log('ValidationError', error);
-				return res.status(400).json({ message: error.details[0].message });
-			}
-			const id = req.params.id;
-			const updateData = req.body;
-			const answer = await answerService.findOne(id, updateData);
-			if (!answer) {
-				return res.status(404).json({ message: `Answer not found` });
-			}
-			const { content } = req.body;
-			if (content) {
-				await answer.update(updateData);
-				return res.status(answer.status).json({
-					message: (answer.message),
-					data: (answer.data)
-				});
-			}
-		} catch (error) {
-			console.log("Error ocurred", error);
-			throw error;
-		}
-	},
+  getOne: async (req, res) => {
+    try {
+      const result = await answerService.getOne(req.params.id);
+      return res.status(result.status).json({ message: result.message, ...(result.data && { data: result.data }) });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+  },
 
-	getAll: async (req, res) => {
-		try {
-			const payload = req.query;
-			const answers = await answerService.getAnswers(payload);
-			return res.status(answers.status).json({
-				message: (answers.message),
-				data: (answers.data)
-			});
-		} catch (error) {
-			console.error("Error fetching answers:", error);
-				return res.status(500).json({
-					message: 'Internal Server Error',
-					error: error
-				});
-		}
-	},
-
-	getOne: async (req, res) => {
-		try {
-			const result = await answerService.getOne(req.params.id);
-			if (!result) {
-				return res.status(result.status).json({
-					message: result.message,
-				});
-			}
-			return res.status(result.status).json({
-				message: (result.message),
-				...(result.data && { data: result.data})
-			});
-		} catch (error) {
-			return res.status(500).json({
-				message : "Error showed up",
-				error : error.message || error
-			})
-		}
-	},
-
-	deleteOne: async (req, res) => {
-		try {
-			const result = await answerService.deleteOne(req.params.id);
-			return res.status(result.status).send({ message: (result.message)});
-		} catch (error) {
-			console.error("Error", error)
-			return res.status(500).json({
-				message : "Error occured",
-				error : error
-			})
-		}
-	}
+  deleteOne: async (req, res) => {
+    try {
+      const result = await answerService.deleteOne(req.params.id);
+      return res.status(result.status).json({ message: result.message });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Error deleting answer', error: error.message });
+    }
+  },
 };
 
 module.exports = { answerController };
