@@ -18,7 +18,7 @@ const questionSchema = Joi.object({
 
 const answerSchema = Joi.object({
 	content: Joi.string().required(),
-	fileUrl: Joi.string().optional(),
+	file_url: Joi.string().uri().optional().allow(null, ''),
 });
 
 const ratingSchema = Joi.object({
@@ -44,15 +44,16 @@ const messageSchema = Joi.object({
 
 const createUserSchema = Joi.object({
 	name: Joi.string().min(3).required(),
-	username: Joi.string().alphanum().min(3).required(true),
+	username: Joi.string().alphanum().min(3).required(),
 	email: Joi.string().email().required(),
-	password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).label('Password'),
+	password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).label('Password').required(),
 	confirm_password: Joi.ref('password'),
 	phone: Joi.string().regex(phoneRegex).optional(),
 	profile_picture: Joi.string().uri().optional().allow(null, ''),
-	gender: Joi.string().required(),
+	gender: Joi.string().valid('male', 'female').required(),
 	birthdate: Joi.date().optional(),
-	type: Joi.string().optional(),
+	role: Joi.string().optional().default('student'),
+	subscribed: Joi.boolean().optional().default(false),
 	is_active: Joi.boolean().optional(),
 });
 
@@ -73,10 +74,20 @@ const resetPasswordSchema = Joi.object({
 	new_password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).required(),
 	confirm_password: Joi.ref('new_password'),
 });
+
 const passwordResetSchema = Joi.object({
-	email: Joi.string().email().required().messages({ 'string.email': 'A valid email is required.', 'any.required': 'Email is required.', }),
-	password: Joi.string().min(6).required().messages({ 'string.min': 'Password must be at least 6 characters long.', 'any.required': 'Password is required.', }),
-	confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({ 'any.only': 'Passwords do not match.', 'any.required': 'Confirm password is required.', }),
+	email: Joi.string().email().required().messages({
+		'string.email': 'A valid email is required.',
+		'any.required': 'Email is required.',
+	}),
+	password: Joi.string().min(8).max(35).pattern(new RegExp(passwordRegEx)).required().messages({
+		'string.min': 'Password must be at least 8 characters long.',
+		'any.required': 'Password is required.',
+	}),
+	confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+		'any.only': 'Passwords do not match.',
+		'any.required': 'Confirm password is required.',
+	}),
 });
 const createOrganizerSchema = Joi.object({
 	first_name: Joi.string().min(3).required(),
@@ -100,11 +111,12 @@ const validate = (schema) => (payload) => {
 };
 
 
-module.exports = { 
+module.exports = {
 	signUpSchema,
 	createUserSchema,
 	updateUserSchema,
 	resetPasswordSchema,
+	passwordResetSchema,
 	questionSchema,
 	ratingSchema,
 	userBadgeSchema,
@@ -112,5 +124,5 @@ module.exports = {
 	idSchema,
 	messageSchema,
 	answerSchema,
-	subjectSchema 
+	subjectSchema,
 };
