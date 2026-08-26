@@ -1,5 +1,5 @@
-const { Subject, User, Answer } = require("../models");
-const subjectController = require("../controllers/subjectController");
+const { Op } = require('sequelize');
+const { Subject } = require('../models');
 
 const subjectService = {
   createSubject: async (payload) => {
@@ -26,10 +26,9 @@ const subjectService = {
 
   findOne: async (payload) => {
     try {
-      const subject = await Subject.findOne({
-        where: { name: payload.name },
-      });
-      if (!subject || subject.length < 1) {
+      const where = payload.id ? { id: payload.id } : { name: payload.name };
+      const subject = await Subject.findOne({ where });
+      if (!subject) {
         return { status: 404, message: 'Subject not found' };
       }
       return { status: 200, message: 'Subject found', data: subject };
@@ -39,20 +38,15 @@ const subjectService = {
     }
   },
 
-  findAll: async (payload) => {
+  findAll: async () => {
     try {
       const subjects = await Subject.findAll({
-        where: { name: {
-          [Op.like]: payload
-        }},
-				attributes: {
-					exclude: ['createdAt', 'updatedAt']
-				}
-			});
-      if(subjects.length === 0) {
-        return { status: 404, message: 'subjects not found'}
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+      });
+      if (subjects.length === 0) {
+        return { status: 404, message: 'No subjects found', data: [] };
       }
-      return { status: 200, message: 'Subjects found!', data: subjects };
+      return { status: 200, message: 'Subjects found', data: subjects };
     } catch (error) {
       throw error;
     }
