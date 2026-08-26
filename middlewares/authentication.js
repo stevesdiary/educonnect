@@ -1,35 +1,29 @@
 const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
 
-const authentication = async (req, res, next) => {
+const authentication = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
-    console.log("No auth header here!");
-    return res.status(401).send("Provide correct token first!");
+    return res.status(401).json({ message: 'No authorization token provided' });
   }
-  
+
   const token = authHeader.split(' ')[1];
-  if (token == null) { 
-    return res.status(401).json({ message: 'Unauthorized or wrong token!' });
+  if (!token) {
+    return res.status(401).json({ message: 'Malformed authorization header' });
   }
-  
+
   try {
     const decoded = jwt.verify(token, secret);
-    if (decoded) {
-      req.user = {
-        id: decoded.id,
-        email: decoded.email,
-        role: decoded.role
-      };
-      next();
-    } else {
-      return res.status(403).send({
-        message: 'Invalid or expired token, or some error occurred'
-      });
-    }
+    req.user = { id: decoded.id, email: decoded.email, role: decoded.role };
+    next();
   } catch (err) {
-    console.log(err, err.message);
-    return res.status(500).send({ message: 'An error occurred', error: err });
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token has expired, please log in again' });
+    }
+    if (err.name === 'JsonWebTokenError') {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    return res.status(401).json({ message: 'Authentication failed' });
   }
 };
 

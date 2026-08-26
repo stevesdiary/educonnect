@@ -5,6 +5,7 @@ const app = express();
 const { Server } = require('socket.io');
 app.use(express.json())
 const http = require('http');
+const errorHandler = require('./middlewares/errorHandler');
 const setupChatSocket = require('./socket/chatSocket');
 const db = require("./config/dbConfig");
 const userRoute = require("./routes/userRoute");
@@ -39,6 +40,8 @@ app.get('/', (req, res, next) => {
 });
 
 setupChatSocket(io);
+
+app.use(errorHandler);
 
 server.listen(port, () => {
 	console.log(`App running on port ${port}`);
