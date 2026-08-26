@@ -1,39 +1,33 @@
-const { Question, User, Subject, Answer } = require("../models");
+const { Op } = require('sequelize');
+const { Question, User, Subject, Answer } = require('../models');
 const eventBus = require('./eventBus');
 
 const questionService = {
   createQuestion: async (payload) => {
     try {
       const verifiedUser = await User.findOne({
-        where: { 
-          id: payload.user_id,
-          is_verified: true
-        }
+        where: { id: payload.user_id, is_verified: true }
       });
       if (!verifiedUser) {
-        return { status: 401, message: "Oops!Your email is not yet verified, verify your email and you can ask your questions and give answers too." };
+        return { status: 401, message: 'Your email is not yet verified. Please verify your email before posting questions.' };
       }
       const subject = await Subject.findOne({
         where: { name: payload.subject },
         attributes: ['id'],
       });
       if (!subject) {
-        throw new Error('Subject not found');
+        return { status: 404, message: 'Subject not found' };
       }
       const questionPayload = {
         topic: payload.topic,
         content: payload.content,
         user_id: payload.user_id,
         subject_id: subject.id,
-        fileUrl: payload.fileUrl,
+        file_url: payload.fileUrl,
       };
-
       const createQuestion = await Question.create(questionPayload);
-      if (!createQuestion) {
-        return { status: 400, message: 'Oops! Question not created', data: null };
-      }
-      eventBus.emit('question.posted', createQuestion)
-      return { status: 200, message: 'Question created successfully', data: createQuestion };
+      eventBus.emit('question.posted', createQuestion);
+      return { status: 201, message: 'Question created successfully', data: createQuestion };
     } catch (error) {
       console.log(error);
       throw error;
@@ -43,18 +37,15 @@ const questionService = {
   allQuestions: async (payload) => {
     try {
       const search = payload.content;
+      const whereClause = search ? { content: { [Op.iLike]: `%${search}%` } } : {};
       const allQuestions = await Question.findAll({
-        where: {
-          content: { [Op.like]: search }
-        },
-        include: [
-          {
-						model: Answer,
-						as: 'answers',
-          }
-        ]
+        where: whereClause,
+        include: [{ model: Answer, as: 'answers' }]
       });
-      return { status: 200, message: 'Questions and associated answers', data: allQuestions }
+      if (allQuestions.length === 0) {
+        return { status: 404, message: 'No questions found', data: [] };
+      }
+      return { status: 200, message: 'Questions retrieved successfully', data: allQuestions };
     } catch (error) {
       throw error;
     }
@@ -63,29 +54,26 @@ const questionService = {
   oneQuestion: async (payload) => {
     try {
       const question = await Question.findOne({
-        where: payload,
-        include: [
-          {
-            model: Answer,
-            as: 'answers',
-          }
-        ]
+        where: { id: payload },
+        include: [{ model: Answer, as: 'answers' }]
       });
-      if (question.length === 0) {
-        return { status: 404, message: "Question not found", data: []}
+      if (!question) {
+        return { status: 404, message: 'Question not found', data: null };
       }
-      return { status: 200, message: 'Question found', data: question }
+      return { status: 200, message: 'Question found', data: question };
     } catch (error) {
       throw error;
     }
   },
 
-  updateQuestion: async (payload) => {
+  updateQuestion: async (id, updateData) => {
     try {
-      const user_id = req.user.user_id;
-      const updateQuestion = await Question.findOne({
-        where: payload, 
-      })
+      const question = await Question.findOne({ where: { id } });
+      if (!question) {
+        return { status: 404, message: 'Question not found' };
+      }
+      await question.update(updateData);
+      return { status: 200, message: 'Question updated successfully', data: question };
     } catch (error) {
       throw error;
     }
@@ -93,55 +81,27 @@ const questionService = {
 
   deleteQuestion: async (payload) => {
     try {
-      const question = await Question.destroy({
-        where: { id: payload },
-      })
-      if (question < 1) {
-        console.log("Question not found");
-        return { status: 404, message: 'Question not found or deleted' };
+      const deleted = await Question.destroy({ where: { id: payload } });
+      if (deleted < 1) {
+        return { status: 404, message: 'Question not found or already deleted' };
       }
-      return { status: 200, message: 'Record deleted', data: question };
-    }
-    catch (error) {
+      return { status: 200, message: 'Question deleted successfully' };
+    } catch (error) {
       console.log(error);
       throw error;
     }
   },
-  
+
   getAll: async (payload) => {
     try {
       const { answer } = payload;
-      let includeOptions = [];
-      if (answer === 'true') { 
-        includeOptions.push({ 
-          model: Answer, 
-          as: 'answers', 
-        }); 
-      }
-      const question = await Question.findAll({
-        include: includeOptions,
-      })
-      return { status: 200, message: 'Questions fetched successfully', data: question };
+      const includeOptions = answer === 'true' ? [{ model: Answer, as: 'answers' }] : [];
+      const questions = await Question.findAll({ include: includeOptions });
+      return { status: 200, message: 'Questions fetched successfully', data: questions };
     } catch (error) {
       throw error;
     }
   },
-
-  deleteQuestion: async (payload) => {
-    try {
-      const removeQuestion = await Question.destroy({
-        where: { id: payload } 
-        });
-      if (removeQuestion.length < 1 ) {
-        return {status: 404, message: 'Record not found or deleted', data: [] };
-      }
-      return { status: 200, message: 'Record deleted', data: deleteQuestion}
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
 };
 
 module.exports = questionService;
-

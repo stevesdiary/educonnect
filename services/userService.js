@@ -1,4 +1,3 @@
-const { validateUser } = require("../middlewares/validate");
 const { User, Question, Answer } = require("../models");
 const userService = {
 	createUser: async(payload) => {
@@ -78,16 +77,13 @@ const userService = {
 
 	update: async(id, updateData) => {
 		try {
-			const user = await User.findOne({ 
-				where: { id },
-			});
-			if (!user){
-				console.log("User record not found");
-				return res.status(404).json({ message: "Oops!, user not found." });
+			const user = await User.findOne({ where: { id } });
+			if (!user) {
+				return { status: 404, message: 'User not found' };
 			}
-			await user.update(updateData)
+			await user.update(updateData);
 			const { password, ...updatedData } = user.toJSON();
-			return res.status(200).json({ message: `${user.name}'s profile Updated succesffully`, data: updatedData });
+			return { status: 200, message: `${user.name}'s profile updated successfully`, data: updatedData };
 		} catch (error) {
 			throw error;
 		}
