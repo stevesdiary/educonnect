@@ -11,13 +11,13 @@
 - [x] Restore `eventBus.js` (uncomment and fix) or remove the `eventBus.emit('question.posted', ...)` call in `questionService.js` to prevent a crash
 - [x] Rewrite `uploadService.js` to use CommonJS `require` — the `import` statement crashes in this project
 
-## Task 3 — Fix Service Layer Bugs
-- [ ] Remove `res` usage from `userService.update` — return plain `{ status, message, data }` objects like every other service method
-- [ ] Remove the duplicate `deleteQuestion` definition in `questionService.js`; fix the second one which references an undefined `deleteQuestion` variable
-- [ ] Add `const { Op } = require('sequelize')` to `questionService.js` and `answerService.js`
-- [ ] Fix `answerService.getOne` — change `Answer.findOne({payload})` to `Answer.findOne({ where: { id: payload } })`
-- [ ] Fix `answerService.getAnswers` — correct the inverted status/message logic and remove the unreachable `!answers` check after the `.length` check
-- [ ] Fix `questionService.oneQuestion` — `findOne` returns `null` or an object, not an array; replace `question.length === 0` with `!question`
+## Task 3 — Fix Service Layer Bugs ✅
+- [x] Remove `res` usage from `userService.update` — return plain `{ status, message, data }` objects like every other service method
+- [x] Remove the duplicate `deleteQuestion` definition in `questionService.js`; fix the second one which references an undefined `deleteQuestion` variable
+- [x] Add `const { Op } = require('sequelize')` to `questionService.js` and `answerService.js`
+- [x] Fix `answerService.getOne` — change `Answer.findOne({payload})` to `Answer.findOne({ where: { id: payload } })`
+- [x] Fix `answerService.getAnswers` — correct the inverted status/message logic and remove the unreachable `!answers` check after the `.length` check
+- [x] Fix `questionService.oneQuestion` — `findOne` returns `null` or an object, not an array; replace `question.length === 0` with `!question`
 
 ## Task 4 — Fix Controller Logic Errors
 - [ ] Fix `userController.updateUser` — the condition `if (!(name || username || phone))` is inverted; update should run when fields ARE provided
