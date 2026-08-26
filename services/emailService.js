@@ -1,21 +1,19 @@
-const { error } = require('console');
 const nodemailer = require('nodemailer');
-const USER = process.env.USER;
+const SMTP_USER = process.env.SMTP_USER;
 
 async function sendVerificationEmail(verificationPayload) {
   try {
     const transporter = nodemailer.createTransport({
-      host: process.env.SERVER,
+      host: process.env.SMTP_SERVER,
       port: 587,
-      // secure: false,
       auth: {
-        user: '80de56001@smtp-brevo.com',
-        pass: process.env.PASSWORD,
+        user: SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
       },
     });
 
     const mailOptions = {
-      from: '80de56001@smtp-brevo.com',
+      from: SMTP_USER,
       to: verificationPayload.email,
       subject: verificationPayload.subject,
       text: verificationPayload.text
