@@ -1,4 +1,5 @@
 const { chatService } = require('../services/chatService');
+const { Message, User } = require('../models');
 
 const setupChatSocket = (io) => {
   io.on('connection', (socket) => {
