@@ -26,10 +26,10 @@
 - [x] Fix `userController.verifyEmail` — the catch block is empty; add a proper error response
 - [x] Fix `userController.verifyEmail` — `storedCode` is referenced from outer scope; declare it locally inside `verifyEmail`
 
-## Task 5 — Fix Middleware Issues
-- [ ] Fix `errorHandler.js` — change signature from `(req, res, next)` to `(err, req, res, next)` so Express treats it as an error-handling middleware and `err` is defined
-- [ ] Register `errorHandler` in `app.js` after all routes
-- [ ] Fix `authentication.js` — catch JWT-specific errors (`JsonWebTokenError`, `TokenExpiredError`) and return 401, not 500
+## Task 5 — Fix Middleware Issues ✅
+- [x] Fix `errorHandler.js` — change signature from `(req, res, next)` to `(err, req, res, next)` so Express treats it as an error-handling middleware and `err` is defined
+- [x] Register `errorHandler` in `app.js` after all routes
+- [x] Fix `authentication.js` — catch JWT-specific errors (`JsonWebTokenError`, `TokenExpiredError`) and return 401, not 500
 
 ## Task 6 — Clean Up & Consolidate
 - [ ] Remove `loginRoute.js` or mount it in `app.js` — it is currently dead code (never registered)
