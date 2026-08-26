@@ -5,7 +5,6 @@ const app = express();
 const { Server } = require('socket.io');
 app.use(express.json())
 const http = require('http');
-const multer = require("multer");
 const setupChatSocket = require('./socket/chatSocket');
 const db = require("./config/dbConfig");
 const userRoute = require("./routes/userRoute");
@@ -30,10 +29,6 @@ app.use('/question', questionRoute);
 app.use("/subject", subjectRoute);
 app.use('/answer', answerRoute);
 
-// app.use('/', (req, res, next) => {
-// 	return res.status(200).json({
-// 		message: "Welcome to EDUCONNECT!",
-// 	});
 app.get('/', (req, res, next) => {
 	try {
 		res.sendFile(path.join(__dirname, 'welcome.html'));
@@ -41,8 +36,10 @@ app.get('/', (req, res, next) => {
 		console.log(error);
 		throw error;
 	}
-
 });
-app.listen(port, () => {
+
+setupChatSocket(io);
+
+server.listen(port, () => {
 	console.log(`App running on port ${port}`);
 });
